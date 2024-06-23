@@ -1,0 +1,146 @@
+import 'package:appflowy_board/appflowy_board.dart';
+
+part './comment_model.dart';
+part './timespan_model.dart';
+
+class TaskModel extends AppFlowyGroupItem {
+  @override
+  final String id;
+  final String boardId;
+  final int order;
+  final String title;
+  final String description;
+  final List<CommentModel> commentList;
+  final List<TimespanModel> timespanList;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final DateTime? completedAt;
+
+  bool get isCompleted => completedAt != null;
+
+  @override
+  String toString() => id;
+
+  TaskModel({
+    required this.id,
+    required this.boardId,
+    required this.order,
+    required this.title,
+    required this.description,
+    required this.commentList,
+    required this.timespanList,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.completedAt,
+  });
+
+  factory TaskModel.fromJson(Map<String, dynamic> json) => TaskModel(
+        id: json["id"],
+        boardId: json["boardId"],
+        order: json["order"],
+        title: json["title"],
+        description: json["description"],
+        commentList: List<CommentModel>.from(
+          json["commentList"].map(
+            (x) => CommentModel.fromJson(x),
+          ),
+        ),
+        timespanList: List<TimespanModel>.from(
+          json["timespanList"].map(
+            (x) => TimespanModel.fromJson(x),
+          ),
+        ),
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.tryParse(json["updatedAt"] ?? ''),
+        completedAt: DateTime.tryParse(json["completedAt"] ?? ''),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "boardId": boardId,
+        "order": order,
+        "title": title,
+        "description": description,
+        "commentList": commentList.map((e) => e.toJson()).toList(),
+        "timespanList": timespanList.map((e) => e.toJson()).toList(),
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "completedAt": completedAt?.toIso8601String(),
+      };
+
+  factory TaskModel.fromDummyMeasum() {
+    return TaskModel(
+      id: '-1',
+      boardId: '-1',
+      order: -1,
+      title: "unknown",
+      description: "N/A",
+      commentList: [],
+      timespanList: [],
+      createdAt: DateTime(1000),
+      updatedAt: null,
+      completedAt: null,
+    );
+  }
+  TaskModel update({
+    int? newOrder,
+    String? newTitle,
+    String? newDescription,
+    List<CommentModel>? newCommentList,
+    List<TimespanModel>? newTimeSpanList,
+    DateTime? newUpdatedAt,
+    DateTime? newCompletedAt,
+  }) {
+    return TaskModel(
+      id: id,
+      boardId: boardId,
+      order: newOrder ?? order,
+      title: newTitle ?? title,
+      description: newDescription ?? description,
+      commentList: [...commentList, ...(newCommentList ?? [])],
+      timespanList: [...timespanList, ...(newTimeSpanList ?? [])],
+      createdAt: createdAt,
+      updatedAt: newUpdatedAt ?? updatedAt,
+      completedAt: newCompletedAt ?? completedAt,
+    );
+  }
+}
+
+final dummyTasks = [
+  TaskModel(
+    id: 'task1',
+    boardId: 'board1',
+    order: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    commentList: [],
+    timespanList: [],
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
+    updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+    completedAt: DateTime.now(),
+  ),
+  TaskModel(
+    id: 'task2',
+    boardId: 'board1',
+    order: 2,
+    title: 'Task 2',
+    description: 'Description for Task 2',
+    commentList: [],
+    timespanList: [],
+    createdAt: DateTime.now().subtract(const Duration(days: 5)),
+    updatedAt: DateTime.now().subtract(const Duration(days: 4)),
+    completedAt: DateTime.now().subtract(const Duration(days: 1)),
+  ),
+  TaskModel(
+    id: 'task3',
+    boardId: 'board2',
+    order: 3,
+    title: 'Task 3',
+    description: 'Description for Task 3',
+    commentList: [],
+    timespanList: [],
+    createdAt: DateTime.now().subtract(const Duration(days: 7)),
+    updatedAt: DateTime.now().subtract(const Duration(days: 6)),
+    completedAt: DateTime.now().subtract(const Duration(days: 2)),
+  ),
+];
