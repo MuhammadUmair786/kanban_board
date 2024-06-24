@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kanban_board/utils/board_utils.dart';
 import 'package:kanban_board/views/add_task_screen.dart';
+import 'package:kanban_board/widgets/snakbar.dart';
 
 import '../components/task_card.dart';
 import '../cubits/board_task/cubit.dart';
@@ -67,8 +68,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   size: 20,
                   color: Colors.red,
                 ),
-                onMoreButtonClick: () {
-                  removeBoard(columnData.customData);
+                onMoreButtonClick: () async {
+                  if (columnData.items.isEmpty) {
+                    await removeBoard(columnData.customData);
+                    context
+                        .read<BoardTaskCubit>()
+                        .deleteBoard(columnData.customData);
+                  } else {
+                    showSnackBar(
+                      context,
+                      "Board should be empty before delating",
+                      backgroundColor: Colors.red,
+                    );
+                  }
                 },
                 onAddButtonClick: () {
                   showAddBoardDialog(context,

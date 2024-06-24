@@ -8,6 +8,7 @@ import '../utils/board_utils.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/custom_buttons.dart';
 import '../widgets/custom_text_feilds.dart';
+import '../widgets/snakbar.dart';
 
 void showAddBoardDialog(BuildContext context, {BoardModel? boardModel}) {
   if (isMobile) {
@@ -74,8 +75,10 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
               widget.boardModel!,
               titleController.text.trim(),
             ).then(
-              (value) {
+              (updatedBoardModel) {
+                context.read<BoardTaskCubit>().updateBoard(updatedBoardModel);
                 Navigator.of(context).pop();
+                showSnackBar(context, "Board Details update");
               },
             );
           } else {
@@ -83,6 +86,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
               (value) {
                 context.read<BoardTaskCubit>().addBoard(value);
                 Navigator.of(context).pop();
+                showSnackBar(context, "Board added sucessfully");
               },
             );
           }
@@ -115,7 +119,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
       return Scaffold(
         appBar: mobileAppbar(title: titleString),
         body: desiredWidget,
-        bottomNavigationBar: Container(
+        bottomSheet: Container(
           height: 70,
           alignment: Alignment.center,
           child: actionButtonWidget,

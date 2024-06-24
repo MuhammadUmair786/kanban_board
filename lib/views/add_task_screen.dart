@@ -6,6 +6,7 @@ import '../utils/task_utils.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/custom_buttons.dart';
 import '../widgets/custom_text_feilds.dart';
+import '../widgets/snakbar.dart';
 
 void showAddTaskDialog(
   BuildContext context,
@@ -86,6 +87,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             ).then(
               (value) {
                 Navigator.of(context).pop();
+                showSnackBar(context, "Task update sucessfully");
               },
             );
           } else {
@@ -94,6 +96,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                 .then(
               (value) {
                 Navigator.of(context).pop();
+                showSnackBar(context, "Task added sucessfully");
               },
             );
           }

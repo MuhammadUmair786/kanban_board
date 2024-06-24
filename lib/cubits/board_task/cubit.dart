@@ -80,7 +80,34 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
         id: boardModel.id, name: boardModel.name, customData: boardModel));
   }
 
+  void updateBoard(BoardModel boardModel) {
+    List<AppFlowyGroupData<dynamic>> groupList =
+        boardController.groupDatas.toList();
+
+    int desiredIndex =
+        groupList.indexWhere((element) => element.id == boardModel.id);
+
+    if (desiredIndex != -1) {
+      AppFlowyGroupData updatedGroup = AppFlowyGroupData(
+        id: boardModel.id,
+        name: boardModel.name,
+        customData: boardModel,
+        items: groupList[desiredIndex].items,
+      );
+      boardController.removeGroup(boardModel.id);
+      boardController.insertGroup(desiredIndex, updatedGroup);
+    }
+  }
+
+  void deleteBoard(BoardModel boardModel) {
+    boardController.removeGroup(boardModel.id);
+  }
+
   void addTask(TaskModel taskModel) {
     boardController.addGroupItem(taskModel.boardId, taskModel);
+  }
+
+  void updateTask(TaskModel taskModel) {
+    boardController.updateGroupItem(taskModel.boardId, taskModel);
   }
 }
