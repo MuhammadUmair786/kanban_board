@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:get_storage/get_storage.dart';
 
 import '../models/board_model.dart';
-import 'time_based_id.dart';
+import '../helpers/time_based_id.dart';
 
 String boardContainerKey = 'BoardContainer';
 

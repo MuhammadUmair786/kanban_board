@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +29,6 @@ class _TaskCardState extends State<TaskCard> {
   void initState() {
     existingDuration = widget.taskModel.getExistingDuration;
 
-    log("Existing durati ${existingDuration.inSeconds}");
     int index = widget.taskModel.timespanList
         .lastIndexWhere((element) => element.endTime == null);
 
@@ -39,15 +37,15 @@ class _TaskCardState extends State<TaskCard> {
     } else {
       pendingTimeSpan = widget.taskModel.timespanList[index];
     }
-
-    log(index.toString());
+    updateDurationString(existingDuration);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         if (pendingTimeSpan == null) {
-          setState(() {
-            updateDurationString(existingDuration);
-          });
+          // do nothing
+          // setState(() {
+          //   updateDurationString(existingDuration);
+          // });
         } else {
           startTimer();
         }

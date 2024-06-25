@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:get_storage/get_storage.dart';
 
 import '../models/task_model.dart';
-import 'time_based_id.dart';
+import '../helpers/time_based_id.dart';
 
 String taskContainerKey = 'TaskContainer';
 
@@ -74,12 +74,14 @@ Future<TaskModel> updateTask(
   String? description,
   int? order,
   List<TimespanModel>? timeSpanList,
+  List<CommentModel>? commentList,
 }) async {
   TaskModel tempTask = task.update(
     newTitle: title,
     newDescription: description,
     newOrder: order,
     newTimeSpanList: timeSpanList,
+    newCommentList: commentList,
     newUpdatedAt: DateTime.now(),
   );
   return handleUpdatingOfTaskInLocalStorage(tempTask);

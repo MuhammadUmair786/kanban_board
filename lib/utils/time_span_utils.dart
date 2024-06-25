@@ -10,11 +10,12 @@ import '../cubits/board_task/cubit.dart';
 import '../models/task_model.dart';
 
 Future<TaskModel> addTimeSpan(BuildContext context, TaskModel taskModel) async {
+  List<TimespanModel> latestTimeSpanList = List.from(taskModel.timespanList);
+  latestTimeSpanList
+      .add(TimespanModel(startTime: DateTime.now(), endTime: null));
   return updateTask(
     taskModel,
-    timeSpanList: [
-      TimespanModel(startTime: DateTime.now(), endTime: null),
-    ],
+    timeSpanList: latestTimeSpanList,
   ).then(
     (value) {
       log(jsonEncode(value.toJson()));
@@ -27,18 +28,22 @@ Future<TaskModel> addTimeSpan(BuildContext context, TaskModel taskModel) async {
 }
 
 Future<TaskModel> endTimeSpan(BuildContext context, TaskModel taskModel) {
-  List<TimespanModel> existingList = List.from(taskModel.timespanList);
+  List<TimespanModel> latestTimeSpanList = List.from(taskModel.timespanList);
 
-  int index = existingList.indexWhere((element) => element.endTime == null);
+  int index =
+      latestTimeSpanList.indexWhere((element) => element.endTime == null);
 
   if (index != -1) {
-    TimespanModel pendingTimeSpan = existingList[index];
-    existingList.removeAt(index);
-    existingList.add(TimespanModel(
-        startTime: pendingTimeSpan.startTime, endTime: DateTime.now()));
-    TaskModel updatedTimeSpanModel = taskModel.updateTimeSpanList(existingList);
-    log(jsonEncode(updatedTimeSpanModel.toJson()));
-    return handleUpdatingOfTaskInLocalStorage(updatedTimeSpanModel).then(
+    TimespanModel pendingTimeSpan = latestTimeSpanList[index];
+    latestTimeSpanList.removeAt(index);
+    latestTimeSpanList.add(
+      TimespanModel(
+        startTime: pendingTimeSpan.startTime,
+        endTime: DateTime.now(),
+      ),
+    );
+
+    return updateTask(taskModel, timeSpanList: latestTimeSpanList).then(
       (value) {
         context.read<BoardTaskCubit>().updateTask(value);
         return value;

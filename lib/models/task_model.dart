@@ -37,6 +37,13 @@ class TaskModel extends AppFlowyGroupItem {
     return timespanList.any((element) => element.endTime == null);
   }
 
+  List<CommentModel> get getCommentSortedList {
+    commentList.sort(
+      (a, b) => b.createdAt.compareTo(a.createdAt),
+    );
+    return commentList;
+  }
+
   TaskModel({
     required this.id,
     required this.boardId,
@@ -113,28 +120,11 @@ class TaskModel extends AppFlowyGroupItem {
       order: newOrder ?? order,
       title: newTitle ?? title,
       description: newDescription ?? description,
-      commentList: [...commentList, ...(newCommentList ?? [])],
-      timespanList: [...timespanList, ...(newTimeSpanList ?? [])],
+      commentList: newCommentList ?? commentList,
+      timespanList: newTimeSpanList ?? timespanList,
       createdAt: createdAt,
       updatedAt: newUpdatedAt ?? updatedAt,
       completedAt: newCompletedAt ?? completedAt,
-    );
-  }
-
-  TaskModel updateTimeSpanList(
-    List<TimespanModel> newTimeSpanList,
-  ) {
-    return TaskModel(
-      id: id,
-      boardId: boardId,
-      order: order,
-      title: title,
-      description: description,
-      commentList: commentList,
-      timespanList: newTimeSpanList,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      completedAt: completedAt,
     );
   }
 }
