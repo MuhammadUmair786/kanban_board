@@ -21,6 +21,22 @@ class TaskModel extends AppFlowyGroupItem {
   @override
   String toString() => id;
 
+  Duration get getExistingDuration {
+    Duration totalDuration = Duration.zero;
+
+    for (var timespan in timespanList) {
+      if (timespan.endTime != null) {
+        totalDuration += timespan.endTime!.difference(timespan.startTime);
+      }
+    }
+
+    return totalDuration;
+  }
+
+  bool get isAnyPendingTimespan {
+    return timespanList.any((element) => element.endTime == null);
+  }
+
   TaskModel({
     required this.id,
     required this.boardId,
@@ -102,6 +118,23 @@ class TaskModel extends AppFlowyGroupItem {
       createdAt: createdAt,
       updatedAt: newUpdatedAt ?? updatedAt,
       completedAt: newCompletedAt ?? completedAt,
+    );
+  }
+
+  TaskModel updateTimeSpanList(
+    List<TimespanModel> newTimeSpanList,
+  ) {
+    return TaskModel(
+      id: id,
+      boardId: boardId,
+      order: order,
+      title: title,
+      description: description,
+      commentList: commentList,
+      timespanList: newTimeSpanList,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      completedAt: completedAt,
     );
   }
 }

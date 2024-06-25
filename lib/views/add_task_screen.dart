@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kanban_board/cubits/board_task/cubit.dart';
 
 import '../constants/extras.dart';
 import '../models/task_model.dart';
@@ -87,6 +89,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             ).then(
               (value) {
                 Navigator.of(context).pop();
+                context.read<BoardTaskCubit>().updateTask(value);
                 showSnackBar(context, "Task update sucessfully");
               },
             );
@@ -96,6 +99,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                 .then(
               (value) {
                 Navigator.of(context).pop();
+                context.read<BoardTaskCubit>().addTask(value);
                 showSnackBar(context, "Task added sucessfully");
               },
             );

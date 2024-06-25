@@ -2,7 +2,7 @@ part of './task_model.dart';
 
 class TimespanModel {
   final DateTime startTime;
-  final DateTime endTime;
+  final DateTime? endTime;
 
   TimespanModel({
     required this.startTime,
@@ -11,11 +11,11 @@ class TimespanModel {
 
   factory TimespanModel.fromJson(Map<String, dynamic> json) => TimespanModel(
         startTime: DateTime.parse(json["startTime"]),
-        endTime: DateTime.parse(json["endTime"]),
+        endTime: DateTime.tryParse(json["endTime"] ?? ''),
       );
 
   Map<String, dynamic> toJson() => {
         "startTime": startTime.toIso8601String(),
-        "endTime": endTime.toIso8601String(),
+        "endTime": endTime?.toIso8601String(),
       };
 }

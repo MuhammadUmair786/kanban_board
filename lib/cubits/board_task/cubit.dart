@@ -16,6 +16,10 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
     boardController = AppFlowyBoardController(
       onMoveGroup: (fromGroupId, fromIndex, toGroupId, toIndex) {
         log('Move group from $fromIndex to $toIndex');
+
+        // TODO:
+
+        // updateTaskOrder(taskList, oldIndex, newIndex)
         // Handle moving groups logic here if needed
       },
       onMoveGroupItem: (groupId, fromIndex, toIndex) {
@@ -23,15 +27,16 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
         List<TaskModel> groupItemList = boardController
             .getGroupController(groupId)!
             .items
-            .map(
-              (element) => element as TaskModel,
-            )
+            .map((element) => element as TaskModel)
             .toList();
 
         updateTaskOrder(groupItemList, fromIndex, toIndex);
       },
       onMoveGroupItemToGroup: (fromGroupId, fromIndex, toGroupId, toIndex) {
         log('Move item from group $fromGroupId:$fromIndex to group $toGroupId:$toIndex');
+
+        // TODO:
+
         // final fromGroup = boardController.groups
         //     .firstWhere((group) => group.id == fromGroupId);
         // final toGroup =
@@ -109,5 +114,9 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
 
   void updateTask(TaskModel taskModel) {
     boardController.updateGroupItem(taskModel.boardId, taskModel);
+  }
+
+  void deleteTask(TaskModel taskModel) {
+    boardController.removeGroupItem(taskModel.boardId, taskModel.id);
   }
 }

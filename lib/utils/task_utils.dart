@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:get_storage/get_storage.dart';
@@ -74,15 +73,21 @@ Future<TaskModel> updateTask(
   String? title,
   String? description,
   int? order,
+  List<TimespanModel>? timeSpanList,
 }) async {
   TaskModel tempTask = task.update(
     newTitle: title,
     newDescription: description,
     newOrder: order,
+    newTimeSpanList: timeSpanList,
+    newUpdatedAt: DateTime.now(),
   );
-  log(jsonEncode(tempTask.toJson()));
-  await GetStorage(taskContainerKey).write(task.id, tempTask.toJson());
-  return tempTask;
+  return handleUpdatingOfTaskInLocalStorage(tempTask);
+}
+
+Future<TaskModel> handleUpdatingOfTaskInLocalStorage(TaskModel task) async {
+  await GetStorage(taskContainerKey).write(task.id, task.toJson());
+  return task;
 }
 
 /// [taskList] -> List of task in that group
