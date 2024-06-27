@@ -16,11 +16,6 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
     boardController = AppFlowyBoardController(
       onMoveGroup: (fromGroupId, fromIndex, toGroupId, toIndex) {
         log('Move group from $fromIndex to $toIndex');
-
-        // TODO:
-
-        // updateTaskOrder(taskList, oldIndex, newIndex)
-        // Handle moving groups logic here if needed
       },
       onMoveGroupItem: (groupId, fromIndex, toIndex) {
         log('Move item within group $groupId from $fromIndex to $toIndex');
@@ -30,24 +25,33 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
             .map((element) => element as TaskModel)
             .toList();
 
-        updateTaskOrder(groupItemList, fromIndex, toIndex);
+        updateTaskOrderWithinBoard(groupItemList, fromIndex, toIndex);
       },
       onMoveGroupItemToGroup: (fromGroupId, fromIndex, toGroupId, toIndex) {
         log('Move item from group $fromGroupId:$fromIndex to group $toGroupId:$toIndex');
 
-        // TODO:
+        // TaskModel draggedTask = boardController
+        //     .getGroupController(fromGroupId)!
+        //     .items
+        //     .map((element) => element as TaskModel)
+        //     .toList()[fromIndex];
 
-        // final fromGroup = boardController.groups
-        //     .firstWhere((group) => group.id == fromGroupId);
-        // final toGroup =
-        //     boardController.groups.firstWhere((group) => group.id == toGroupId);
-        // final item = fromGroup.items[fromIndex]
-        //     as AppFlowyGroupItem; // Cast to AppFlowyGroupItem
-        // // Perform any additional operations with the item
-        // print('Moved item: ${item.title}');
-        // // Update the groups to reflect the move
-        // fromGroup.removeItem(fromIndex);
-        // toGroup.insertItem(toIndex, item);
+        List<TaskModel> newGroupItemList = boardController
+            .getGroupController(toGroupId)!
+            .items
+            .map((element) => element as TaskModel)
+            .toList();
+
+        TaskModel draggedTask = newGroupItemList[toIndex];
+
+        log(draggedTask.toJson().toString());
+
+        updateTaskOrderToOtherBoard(
+          newBoardId: toGroupId,
+          newBoardTaskList: newGroupItemList,
+          draggedTask: draggedTask,
+          newIndex: toIndex,
+        );
       },
     );
   }

@@ -105,7 +105,9 @@ class TaskModel extends AppFlowyGroupItem {
       completedAt: null,
     );
   }
+
   TaskModel update({
+    String? newBoardId,
     int? newOrder,
     String? newTitle,
     String? newDescription,
@@ -116,7 +118,7 @@ class TaskModel extends AppFlowyGroupItem {
   }) {
     return TaskModel(
       id: id,
-      boardId: boardId,
+      boardId: newBoardId ?? boardId,
       order: newOrder ?? order,
       title: newTitle ?? title,
       description: newDescription ?? description,

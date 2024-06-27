@@ -70,6 +70,7 @@ Future<void> removeTask(TaskModel task) async {
 
 Future<TaskModel> updateTask(
   TaskModel task, {
+  String? boardId,
   String? title,
   String? description,
   int? order,
@@ -77,6 +78,7 @@ Future<TaskModel> updateTask(
   List<CommentModel>? commentList,
 }) async {
   TaskModel tempTask = task.update(
+    newBoardId: boardId,
     newTitle: title,
     newDescription: description,
     newOrder: order,
@@ -93,7 +95,7 @@ Future<TaskModel> handleUpdatingOfTaskInLocalStorage(TaskModel task) async {
 }
 
 /// [taskList] -> List of task in that group
-Future<void> updateTaskOrder(
+Future<void> updateTaskOrderWithinBoard(
     List<TaskModel> taskList, int oldIndex, int newIndex) async {
   final lowerIndex = oldIndex < newIndex ? oldIndex : newIndex;
   final upperIndex = oldIndex < newIndex ? newIndex : oldIndex;
@@ -102,13 +104,47 @@ Future<void> updateTaskOrder(
 
   // Update the order of affected tasks
   for (int i = lowerIndex; i <= upperIndex; i++) {
-    TaskModel tempcategory = taskList[i];
+    TaskModel tempTask = taskList[i];
     futureList.add(
       updateTask(
-        tempcategory,
+        tempTask,
         order: i,
       ),
     );
+  }
+  Future.wait(futureList);
+}
+
+Future<void> updateTaskOrderToOtherBoard({
+  required String newBoardId,
+  required List<TaskModel> newBoardTaskList,
+  required TaskModel draggedTask,
+  required int newIndex,
+}) async {
+  final lowerIndex = newIndex + 1;
+  final upperIndex = (newBoardTaskList.length - 1);
+
+  List<Future> futureList = [];
+
+  futureList.add(
+    updateTask(
+      draggedTask,
+      boardId: newBoardId,
+      order: newIndex,
+    ),
+  );
+
+  if (lowerIndex < upperIndex) {
+    // Update the order of affected tasks
+    for (int i = lowerIndex; i <= upperIndex; i++) {
+      TaskModel tempTask = newBoardTaskList[i];
+      futureList.add(
+        updateTask(
+          tempTask,
+          order: i,
+        ),
+      );
+    }
   }
   Future.wait(futureList);
 }

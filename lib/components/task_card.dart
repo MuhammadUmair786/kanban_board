@@ -145,7 +145,16 @@ class _TaskCardState extends State<TaskCard> {
               const Divider(
                 thickness: 0.1,
               ),
-              Text("${widget.taskModel.commentList.length} comments"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("${widget.taskModel.commentList.length} comments"),
+                  // Text(
+                  //   widget.taskModel.order.toString(),
+                  //   textScaler: const TextScaler.linear(2),
+                  // )
+                ],
+              ),
             ],
           ),
         ),
