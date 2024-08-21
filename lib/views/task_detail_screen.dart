@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:kanban_board/helpers/formate_duration.dart';
-import 'package:kanban_board/utils/comment_utils.dart';
 
 import '../constants/extras.dart';
 import '../cubits/task/cubit.dart';
+import '../helpers/formate_duration.dart';
 import '../models/task_model.dart';
+import '../utils/comment_utils.dart';
 import '../utils/time_span_utils.dart';
 import '../widgets/app_bar.dart';
 
@@ -30,7 +29,7 @@ void showTaskDetailDialog(BuildContext context, TaskModel taskModel) {
           taskModel: taskModel,
         );
       },
-      barrierLabel: 'showEventsDialog',
+      barrierLabel: 'showTaskDetailDialog',
       barrierDismissible: true,
     );
   }
@@ -62,7 +61,6 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
   void initState() {
     existingDuration = widget.taskModel.getExistingDuration;
 
-    log("Existing durati ${existingDuration.inSeconds}");
     int index = widget.taskModel.timespanList
         .lastIndexWhere((element) => element.endTime == null);
 
@@ -71,8 +69,6 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
     } else {
       pendingTimeSpan = widget.taskModel.timespanList[index];
     }
-
-    log(index.toString());
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
@@ -112,7 +108,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String titleText = "";
+    String titleText = widget.taskModel.title;
     Widget desiredWidget = BlocProvider(
       create: (context) => TaskCubit(widget.taskModel),
       child: BlocBuilder<TaskCubit, TaskModel>(
@@ -246,9 +242,21 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                       ],
                     ),
                   ],
-                  const Text(
-                    "Total Duration",
-                    textScaler: TextScaler.linear(1.3),
+                  const SizedBox(height: 5),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Text(
+                        "Total Duration: ",
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        formatDuration(
+                          widget.taskModel.getExistingDuration,
+                        ),
+                        textScaler: const TextScaler.linear(1.2),
+                      )
+                    ],
                   ),
                 ],
                 TextFormField(

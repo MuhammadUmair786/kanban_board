@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
   localization: ^2.1.1
   appflowy_board: ^0.1.2
-  flutter_bloc: ^8.1.5
+  flutter_bloc: ^8.1.6
   flutter_localizations:
     sdk: flutter
   equatable: ^2.0.5

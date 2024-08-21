@@ -85,8 +85,13 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
   }
 
   void addBoard(BoardModel boardModel) {
-    boardController.addGroup(AppFlowyGroupData(
-        id: boardModel.id, name: boardModel.name, customData: boardModel));
+    boardController.addGroup(
+      AppFlowyGroupData(
+        id: boardModel.id,
+        name: boardModel.name,
+        customData: boardModel,
+      ),
+    );
   }
 
   void updateBoard(BoardModel boardModel) {
@@ -113,6 +118,8 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
   }
 
   void addTask(TaskModel taskModel) {
+    log("add task ${taskModel.toJson()}");
+    log(boardController.groupIds.toString());
     boardController.addGroupItem(taskModel.boardId, taskModel);
   }
 
