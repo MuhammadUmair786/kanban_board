@@ -4,6 +4,14 @@ const double fontSizeLarge = 16.0;
 const double fontSizeMedium = 14.0;
 const double fontSizeSmall = 12.0;
 
+Map<String, ThemeData> availbleThemes = {
+  "classicBlueTheme": classicBlueTheme,
+  "modernGreenTheme": modernGreenTheme,
+  "darkMinimalistTheme": darkMinimalistTheme,
+  "playfulPinkTheme": playfulPinkTheme,
+  "vibrantOrangeTheme": vibrantOrangeTheme,
+};
+
 // Classic Blue Theme
 final ThemeData classicBlueTheme = ThemeData(
   colorScheme: const ColorScheme.light(

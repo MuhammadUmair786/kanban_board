@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:appflowy_board/appflowy_board.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +6,7 @@ import 'package:kanban_board/views/add_task_screen.dart';
 import 'package:kanban_board/views/history_screen.dart';
 import 'package:kanban_board/widgets/snakbar.dart';
 
+import '../components/drawer.dart';
 import '../components/task_card.dart';
 import '../cubits/board_task/cubit.dart';
 import '../cubits/board_task/state.dart';
@@ -42,13 +41,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
+      drawer: const DrawerWidget(),
       body: BlocBuilder<BoardTaskCubit, BoardTaskState>(
         builder: (context, state) {
           const config = AppFlowyBoardConfig(
             groupBackgroundColor: Color.fromRGBO(247, 248, 252, 1),
             stretchGroupHeight: true,
           );
-          log("rebuild");
+
           return AppFlowyBoard(
             controller: context.read<BoardTaskCubit>().boardController,
             cardBuilder: (context, group, groupItem) {

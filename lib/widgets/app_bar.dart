@@ -11,7 +11,6 @@ AppBar mobileAppbar({
   bool isBackButton = true,
   List<Widget>? actionWidgetsList,
   double elevation = 5,
-  Color baseColor = Colors.red,
   Color contentColor = Colors.white,
   void Function()? onBack,
   double height = 43,
@@ -32,7 +31,7 @@ AppBar mobileAppbar({
     // ),
     toolbarHeight: height,
     automaticallyImplyLeading: isBackButton,
-    backgroundColor: baseColor,
+
     elevation: elevation,
     centerTitle: true,
     leading: isBackButton

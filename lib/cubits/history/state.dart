@@ -1,4 +1,4 @@
-import '../../models/task_model.dart';
+part of './cubit.dart';
 
 abstract class HistoryState {}
 

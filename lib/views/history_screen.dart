@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/history_task_card.dart';
 import '../constants/extras.dart';
 import '../cubits/history/cubit.dart';
-import '../cubits/history/state.dart';
 import '../utils/board_utils.dart';
 import '../widgets/app_bar.dart';
 

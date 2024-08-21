@@ -1,8 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kanban_board/utils/task_utils.dart';
 
 import '../../models/task_model.dart';
-import 'state.dart';
+import '../../utils/task_utils.dart';
+
+part 'state.dart';
 
 class HistoryCubit extends Cubit<HistoryState> {
   HistoryCubit() : super(HistoryInitial()) {
