@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:kanban_board/utils/task_utils.dart';
+import 'package:kanban_board/widgets/confirmation_dialog.dart';
+import 'package:kanban_board/widgets/custom_buttons.dart';
 
+import '../components/task_timespan_dialog.dart';
 import '../constants/extras.dart';
-import '../cubits/task/cubit.dart';
 import '../helpers/formate_duration.dart';
 import '../models/task_model.dart';
 import '../utils/comment_utils.dart';
@@ -47,6 +50,7 @@ class TaskDetailWidget extends StatefulWidget {
 }
 
 class _TaskDetailWidgetState extends State<TaskDetailWidget> {
+  late TaskModel taskModel;
   String durationString = "";
   late Duration existingDuration;
 
@@ -55,316 +59,254 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
 
   TextEditingController commentTextController = TextEditingController();
 
-  String? updateCommentId;
-
   @override
   void initState() {
-    existingDuration = widget.taskModel.getExistingDuration;
+    taskModel = widget.taskModel;
+    durationString = formatDuration(taskModel.getExistingDuration);
+    manageTimer();
+    super.initState();
+  }
 
-    int index = widget.taskModel.timespanList
+  void manageTimer() {
+    existingDuration = taskModel.getExistingDuration;
+
+    int index = taskModel.timespanList
         .lastIndexWhere((element) => element.endTime == null);
 
     if (index == -1) {
       pendingTimeSpan = null;
     } else {
-      pendingTimeSpan = widget.taskModel.timespanList[index];
+      pendingTimeSpan = taskModel.timespanList[index];
     }
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        log("inside postframe call");
         if (pendingTimeSpan == null) {
+          log("peding is null");
           setState(() {
             updateDurationString(existingDuration);
           });
         } else {
-          startTimer();
+          timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+            setState(() {
+              final ongoingDuration =
+                  DateTime.now().difference(pendingTimeSpan!.startTime);
+              final totalDuration = existingDuration + ongoingDuration;
+              updateDurationString(totalDuration);
+            });
+          });
         }
       },
     );
-
-    super.initState();
   }
 
   @override
   void dispose() {
-    timer?.cancel();
+    stopTimer();
     super.dispose();
   }
 
-  void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        final ongoingDuration =
-            DateTime.now().difference(pendingTimeSpan!.startTime);
-        final totalDuration = existingDuration + ongoingDuration;
-        updateDurationString(totalDuration);
-      });
-    });
+  void stopTimer() {
+    try {
+      timer?.cancel();
+    } catch (_) {}
   }
 
   void updateDurationString(Duration duration) {
     durationString = formatDuration(duration);
   }
 
+  void updateThisScreenTask(TaskModel newValue) {
+    setState(() {
+      taskModel = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    String titleText = widget.taskModel.title;
-    Widget desiredWidget = BlocProvider(
-      create: (context) => TaskCubit(widget.taskModel),
-      child: BlocBuilder<TaskCubit, TaskModel>(
-        builder: (context, task) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.taskModel.title,
-                  textScaler: const TextScaler.linear(1.2),
+    String titleText = taskModel.title;
+    Widget desiredWidget = SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            taskModel.title,
+            textScaler: const TextScaler.linear(1.2),
+          ),
+          Text(taskModel.description),
+          if (taskModel.timespanList.isNotEmpty) ...[
+            CustomElevatedButton(
+                label: "Show Time Span",
+                onPressed: () {
+                  showTaskTimeSpanDialog(taskModel);
+                }),
+          ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () async {
+                  if (taskModel.isAnyPendingTimespan) {
+                    // do nothing
+                  } else {
+                    await addTimeSpan(context, taskModel).then(
+                      (value) async {
+                        updateThisScreenTask(value);
+                        manageTimer();
+                      },
+                    );
+                  }
+                },
+                icon: const Icon(Icons.play_arrow),
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(durationString),
                 ),
-                Text(widget.taskModel.description),
-                if (widget.taskModel.timespanList.isNotEmpty) ...[
-                  const Text(
-                    "TImespans",
-                    textScaler: TextScaler.linear(1.3),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(),
-                      ),
-                    ),
-                    child: const Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Start Time",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            "End Time",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            "Duration",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ...widget.taskModel.timespanList
-                      .where(
-                        (element) => element.endTime != null,
-                      )
-                      .map(
-                        (e) => Container(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "${Jiffy.parseFromDateTime(e.startTime).yMMMd}\n${Jiffy.parseFromDateTime(e.startTime).jm}",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  "${Jiffy.parseFromDateTime(e.endTime!).yMMMd}\n${Jiffy.parseFromDateTime(e.endTime!).jm}",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  formatDuration(
-                                    e.endTime!.difference(e.startTime),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                  if (widget.taskModel.isAnyPendingTimespan) ...[
-                    // Row(
-                    //   children: [
-                    //     Expanded(child: Text(e.startTime.toIso8601String())),
-                    //     const SizedBox(width: 5),
-                    //     Expanded(child: Text(e.endTime!.toIso8601String())),
-                    //     const SizedBox(width: 5),
-                    //     Expanded(
-                    //       child: Text(
-                    //         formatDuration(
-                    //           e.endTime!.difference(e.startTime),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            if (widget.taskModel.isAnyPendingTimespan) {
-                              // do nothing
-                            } else {
-                              addTimeSpan(context, widget.taskModel);
-                            }
-                          },
-                          icon: const Icon(Icons.play_arrow),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            if (widget.taskModel.isAnyPendingTimespan) {
-                              endTimeSpan(context, widget.taskModel);
-                            } else {
-                              // do nothing
-                            }
-                          },
-                          icon: const Icon(Icons.pause),
-                        ),
-                      ],
-                    ),
-                  ],
-                  const SizedBox(height: 5),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const Text(
-                        "Total Duration: ",
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        formatDuration(
-                          widget.taskModel.getExistingDuration,
-                        ),
-                        textScaler: const TextScaler.linear(1.2),
-                      )
-                    ],
-                  ),
-                ],
-                TextFormField(
-                  controller: commentTextController,
-                  decoration: const InputDecoration(
-                    hintText: "Add new comment",
-                  ),
-                  minLines: 1,
-                  maxLines: 5,
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (value) async {
-                    if (value.isEmpty) {
-                      return;
-                    }
-                    if (updateCommentId == null) {
-                      await addComment(context, widget.taskModel, value.trim());
-                    } else {
-                      await editComment(
-                        context,
-                        widget.taskModel,
-                        updateCommentId!,
-                        value.trim(),
-                      );
-                    }
-                    commentTextController.clear();
-                  },
-                ),
-                const SizedBox(height: 20),
-                if (widget.taskModel.commentList.isNotEmpty) ...[
-                  ...widget.taskModel.getCommentSortedList.map(
-                    (e) => Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              e.comment,
-                              textScaler: const TextScaler.linear(1.2),
-                            ),
-                          ),
-                          const Divider(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: 25,
-                                    height: 25,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        deleteComment(
-                                            context, widget.taskModel, e.id);
-                                      },
-                                      padding: EdgeInsets.zero,
-                                      iconSize: 20,
-                                      icon: const Icon(
-                                          Icons.delete_forever_rounded),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  SizedBox(
-                                    width: 25,
-                                    height: 25,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        updateCommentId = e.id;
-                                        commentTextController.text = e.comment;
-                                      },
-                                      padding: EdgeInsets.zero,
-                                      iconSize: 20,
-                                      icon: const Icon(Icons.edit),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Text(Jiffy.parseFromDateTime(e.createdAt)
-                                    .yMMMdjm),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ],
+              ),
+              IconButton(
+                onPressed: () async {
+                  if (taskModel.isAnyPendingTimespan) {
+                    await endTimeSpan(context, taskModel).then(
+                      (value) {
+                        stopTimer();
+                        updateThisScreenTask(value);
+                      },
+                    );
+                  } else {
+                    // do nothing
+                  }
+                },
+                icon: const Icon(Icons.pause),
+              ),
+            ],
+          ),
+          TextFormField(
+            controller: commentTextController,
+            decoration: const InputDecoration(
+              hintText: "Add new comment",
             ),
+            minLines: 1,
+            maxLines: 5,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (value) async {
+              if (value.isEmpty) {
+                return;
+              }
+
+              await addComment(context, taskModel, value.trim()).then(
+                (value) {
+                  updateThisScreenTask(value);
+                  commentTextController.clear();
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 20),
+          if (taskModel.commentList.isNotEmpty) ...[
+            ...taskModel.getCommentSortedList.map(
+              (e) => Container(
+                key: ValueKey(e.id),
+                margin: const EdgeInsets.only(bottom: 5),
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        e.comment,
+                        textScaler: const TextScaler.linear(1.2),
+                      ),
+                    ),
+                    const Divider(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 25,
+                              height: 25,
+                              child: IconButton(
+                                onPressed: () async {
+                                  await showConfirmationDialog(
+                                    title: "Delete Comment",
+                                    description:
+                                        "Are you sure you want to delete comment",
+                                    onYes: () async {
+                                      Navigator.of(context).pop();
+                                      await deleteComment(
+                                        taskModel,
+                                        e.id,
+                                      ).then(
+                                        (value) {
+                                          updateThisScreenTask(value);
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                                padding: EdgeInsets.zero,
+                                iconSize: 20,
+                                icon: const Icon(Icons.delete_forever_rounded),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                              Jiffy.parseFromDateTime(e.createdAt).yMMMdjm),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+
+    Widget deleteTaskButton = SizedBox(
+      width: 25,
+      height: 25,
+      child: IconButton(
+        onPressed: () async {
+          await removeTask(taskModel).then(
+            (value) {
+              if (value) {
+                Navigator.of(context).pop();
+              }
+            },
           );
         },
+        icon: const Icon(Icons.delete_forever),
+        color: Colors.red,
+        padding: EdgeInsets.zero,
+        splashRadius: 15,
       ),
     );
 
     if (isMobile) {
       return Scaffold(
-        appBar: mobileAppbar(title: titleText),
+        appBar: mobileAppbar(
+          title: titleText,
+          actionWidgetsList: [
+            deleteTaskButton,
+          ],
+        ),
         body: desiredWidget,
       );
     } else {
@@ -383,9 +325,13 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        titleText,
+                      Expanded(
+                        child: Text(
+                          titleText,
+                        ),
                       ),
+                      deleteTaskButton,
+                      const SizedBox(width: 5),
                       SizedBox(
                         width: 25,
                         height: 25,

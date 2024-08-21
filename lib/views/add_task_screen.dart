@@ -90,7 +90,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               (value) {
                 Navigator.of(context).pop();
                 context.read<BoardTaskCubit>().updateTask(value);
-                showSnackBar(context, "Task update sucessfully");
+                showSnackBar("Task update sucessfully");
               },
             );
           } else {
@@ -100,7 +100,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               (value) {
                 Navigator.of(context).pop();
                 context.read<BoardTaskCubit>().addTask(value);
-                showSnackBar(context, "Task added sucessfully");
+                showSnackBar("Task added sucessfully");
               },
             );
           }

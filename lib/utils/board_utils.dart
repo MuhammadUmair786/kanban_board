@@ -18,6 +18,15 @@ Future<BoardModel> addBoard(String name) async {
   return tempBoard;
 }
 
+Future<void> addBoardInBulk(List<dynamic> jsonList) async {
+  List<Future<dynamic>> futureList = jsonList
+      .map(
+        (json) => GetStorage(boardContainerKey).write(json['id'], json),
+      )
+      .toList();
+  await Future.wait(futureList);
+}
+
 BoardModel getBoardById(String id) {
   try {
     return BoardModel.fromJson(GetStorage(boardContainerKey).read(id));

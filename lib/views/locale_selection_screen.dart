@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kanban_board/cubits/theme/cubit.dart';
-import 'package:kanban_board/utils/theme_utils.dart';
+import 'package:kanban_board/utils/custom_utils.dart';
 
 import '../../../localization/localization.dart';
 import '../../../widgets/fitted_text_widget.dart';

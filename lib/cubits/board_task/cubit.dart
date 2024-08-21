@@ -90,6 +90,7 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
         id: boardModel.id,
         name: boardModel.name,
         customData: boardModel,
+        items: [],
       ),
     );
   }
@@ -118,8 +119,6 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
   }
 
   void addTask(TaskModel taskModel) {
-    log("add task ${taskModel.toJson()}");
-    log(boardController.groupIds.toString());
     boardController.addGroupItem(taskModel.boardId, taskModel);
   }
 

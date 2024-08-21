@@ -6,6 +6,7 @@ import '../localization/localization.dart';
 
 const String selectedThemeKey = "selectedTheme";
 const String selectedLocaleKey = "selectedLocale";
+const String lastUpdateBackUpKey = "lastUpdateBackUp";
 
 Future<void> saveThemeLocally(String themeName) async {
   await GetStorage().write(selectedThemeKey, themeName);
@@ -36,4 +37,16 @@ Locale getSavedLocale() {
   } catch (e) {
     return supportedLocales.first;
   }
+}
+
+DateTime? getLastUpdateBackUp() {
+  try {
+    return DateTime.parse(GetStorage().read(lastUpdateBackUpKey)).toLocal();
+  } catch (_) {
+    return null;
+  }
+}
+
+Future<void> setLastUpdatebackUp(DateTime dateTime) async {
+  await GetStorage().write(lastUpdateBackUpKey, dateTime.toIso8601String());
 }

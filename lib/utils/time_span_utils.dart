@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,10 +15,7 @@ Future<TaskModel> addTimeSpan(BuildContext context, TaskModel taskModel) async {
     timeSpanList: latestTimeSpanList,
   ).then(
     (value) {
-      log(jsonEncode(value.toJson()));
-
       context.read<BoardTaskCubit>().updateTask(value);
-
       return value;
     },
   );

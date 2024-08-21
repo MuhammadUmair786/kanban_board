@@ -7,16 +7,16 @@ String formatDuration(Duration duration) {
   List<String> parts = [];
 
   if (days > 0) {
-    parts.add('$days days');
+    parts.add('${days}d');
   }
   if (hours > 0) {
-    parts.add('$hours hours');
+    parts.add('${hours}h');
   }
   if (minutes > 0) {
-    parts.add('$minutes minutes');
+    parts.add('${minutes}m');
   }
   if (seconds > 0) {
-    parts.add('$seconds seconds');
+    parts.add('${seconds}s');
   }
 
   return parts.join(' ');

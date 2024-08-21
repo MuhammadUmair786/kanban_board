@@ -78,7 +78,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
               (updatedBoardModel) {
                 context.read<BoardTaskCubit>().updateBoard(updatedBoardModel);
                 Navigator.of(context).pop();
-                showSnackBar(context, "Board Details update");
+                showSnackBar("Board Details update");
               },
             );
           } else {
@@ -86,7 +86,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
               (value) {
                 context.read<BoardTaskCubit>().addBoard(value);
                 Navigator.of(context).pop();
-                showSnackBar(context, "Board added sucessfully");
+                showSnackBar("Board added sucessfully");
               },
             );
           }

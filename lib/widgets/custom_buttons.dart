@@ -7,14 +7,14 @@ class CustomElevatedButton extends StatelessWidget {
       {super.key,
       required this.label,
       required this.onPressed,
-      this.backgroundColor = Colors.red,
+      this.backgroundColor,
       this.width = 240,
       this.height = 40,
       this.icon,
       this.textColor});
   final String label;
   final Function() onPressed;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final double width;
   final double height;
   final Widget? icon;
@@ -59,13 +59,13 @@ class CustomOutlineButton extends StatelessWidget {
       {super.key,
       required this.label,
       required this.onPressed,
-      this.borderColor = Colors.red,
+      this.borderColor,
       this.width = 240,
       this.height = 47,
       this.icon});
   final String label;
   final Function()? onPressed;
-  final Color borderColor;
+  final Color? borderColor;
   final double width;
   final Widget? icon;
   final double height;
@@ -77,7 +77,7 @@ class CustomOutlineButton extends StatelessWidget {
         // backgroundColor: backgroundColor,
         fixedSize: Size(width, height),
         side: BorderSide(
-          color: borderColor,
+          color: borderColor ?? const Color(0xFF000000),
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),

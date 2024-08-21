@@ -93,7 +93,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         .deleteBoard(columnData.customData);
                   } else {
                     showSnackBar(
-                      context,
                       "Board should be empty before delating",
                       backgroundColor: Colors.red,
                     );
@@ -115,7 +114,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showAddBoardDialog(context);
-          // showAddTaskDialog(boardId);
         },
         tooltip: "Add new board",
         child: const Icon(Icons.add),

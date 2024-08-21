@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanban_board/views/backup_setting_screen.dart';
 import 'package:kanban_board/views/locale_selection_screen.dart';
 import 'package:kanban_board/views/theme_selection_screen.dart';
 import 'package:kanban_board/widgets/fitted_text_widget.dart';
@@ -36,6 +37,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             label: "Languages",
             onTap: () {
               showLocaleSelectionDialog(context);
+            },
+          ),
+          DrawerItemWidget(
+            label: "Backup",
+            onTap: () {
+              showBackupSettingDialog(context);
             },
           ),
         ],

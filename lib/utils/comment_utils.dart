@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kanban_board/constants/extras.dart';
 import 'package:kanban_board/helpers/time_based_id.dart';
 import 'package:kanban_board/utils/task_utils.dart';
 
@@ -28,8 +29,29 @@ Future<TaskModel> addComment(
   );
 }
 
-Future<TaskModel> editComment(BuildContext context, TaskModel taskModel,
-    String commentId, String updatedComment) {
+// Future<TaskModel> editComment(BuildContext context, TaskModel taskModel,
+//     String commentId, String updatedComment) {
+//   List<CommentModel> latestCommentList = List.from(taskModel.commentList);
+
+//   int index =
+//       latestCommentList.indexWhere((element) => element.id == commentId);
+
+//   if (index != -1) {
+//     latestCommentList.removeAt(index);
+//     latestCommentList.add(CommentModel(id: commentId, comment: updatedComment));
+
+//     return updateTask(taskModel, commentList: latestCommentList).then(
+//       (value) {
+//         context.read<BoardTaskCubit>().updateTask(value);
+//         return value;
+//       },
+//     );
+//   } else {
+//     return Future.delayed(Duration.zero, () => taskModel);
+//   }
+// }
+
+Future<TaskModel> deleteComment(TaskModel taskModel, String commentId) {
   List<CommentModel> latestCommentList = List.from(taskModel.commentList);
 
   int index =
@@ -37,32 +59,11 @@ Future<TaskModel> editComment(BuildContext context, TaskModel taskModel,
 
   if (index != -1) {
     latestCommentList.removeAt(index);
-    latestCommentList.add(CommentModel(id: commentId, comment: updatedComment));
 
     return updateTask(taskModel, commentList: latestCommentList).then(
       (value) {
-        context.read<BoardTaskCubit>().updateTask(value);
-        return value;
-      },
-    );
-  } else {
-    return Future.delayed(Duration.zero, () => taskModel);
-  }
-}
+        generalContext.read<BoardTaskCubit>().updateTask(value);
 
-Future<TaskModel> deleteComment(
-    BuildContext context, TaskModel taskModel, String commentId) {
-  List<CommentModel> latestCommentList = List.from(taskModel.commentList);
-
-  int index =
-      latestCommentList.indexWhere((element) => element.id == commentId);
-
-  if (index != -1) {
-    latestCommentList.removeAt(index);
-
-    return updateTask(taskModel, commentList: latestCommentList).then(
-      (value) {
-        context.read<BoardTaskCubit>().updateTask(value);
         return value;
       },
     );
