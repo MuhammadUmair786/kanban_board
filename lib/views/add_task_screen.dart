@@ -120,6 +120,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               labelText: 'Title',
               hintText: 'Enter title',
               controller: titleController,
+              autofocus: true,
             ),
             CustomTextFormFieldWithLabel(
               labelText: 'Notes',

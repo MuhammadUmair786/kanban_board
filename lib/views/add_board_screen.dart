@@ -63,34 +63,38 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
   Widget build(BuildContext context) {
     String titleString = "${isUpdate ? "Update" : "Create"} Board";
 
+    Future<void> handleSubmit() async {
+      FocusScope.of(context).unfocus();
+
+      if (formKey.currentState!.validate()) {
+        if (isUpdate) {
+          await updateBoard(
+            widget.boardModel!,
+            titleController.text.trim(),
+          ).then(
+            (updatedBoardModel) {
+              context.read<BoardTaskCubit>().updateBoard(updatedBoardModel);
+              Navigator.of(context).pop();
+              showSnackBar("Board Details update");
+            },
+          );
+        } else {
+          await addBoard(titleController.text.trim()).then(
+            (value) {
+              context.read<BoardTaskCubit>().addBoard(value);
+              Navigator.of(context).pop();
+              showSnackBar("Board added sucessfully");
+            },
+          );
+        }
+      }
+    }
+
     Widget actionButtonWidget = CustomElevatedButton(
       label: isUpdate ? 'Update' : 'Create Board',
       icon: isUpdate ? const Icon(Icons.update) : const Icon(Icons.add),
-      onPressed: () async {
-        FocusScope.of(context).unfocus();
-
-        if (formKey.currentState!.validate()) {
-          if (isUpdate) {
-            await updateBoard(
-              widget.boardModel!,
-              titleController.text.trim(),
-            ).then(
-              (updatedBoardModel) {
-                context.read<BoardTaskCubit>().updateBoard(updatedBoardModel);
-                Navigator.of(context).pop();
-                showSnackBar("Board Details update");
-              },
-            );
-          } else {
-            await addBoard(titleController.text.trim()).then(
-              (value) {
-                context.read<BoardTaskCubit>().addBoard(value);
-                Navigator.of(context).pop();
-                showSnackBar("Board added sucessfully");
-              },
-            );
-          }
-        }
+      onPressed: () {
+        handleSubmit();
       },
       width: 200,
     );
@@ -107,6 +111,10 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
               hintText: 'Enter title',
               controller: titleController,
               textInputAction: TextInputAction.done,
+              autofocus: true,
+              onActionComplete: (p0) {
+                handleSubmit();
+              },
             ),
             const SizedBox(height: 10),
             if (!isMobile) actionButtonWidget,

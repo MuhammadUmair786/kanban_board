@@ -108,6 +108,7 @@ class CustomTextFormFieldWithLabel extends StatelessWidget {
     this.textCapitalization,
     this.onChanged,
     this.autofillHintsList,
+    this.autofocus = false,
   });
   final String? hintText;
   final String labelText;
@@ -127,6 +128,7 @@ class CustomTextFormFieldWithLabel extends StatelessWidget {
   final TextCapitalization? textCapitalization;
   final void Function(String)? onChanged;
   final List<String>? autofillHintsList;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +143,7 @@ class CustomTextFormFieldWithLabel extends StatelessWidget {
       maxLength: maxLength,
       inputFormatters: inputFormatterList,
       keyboardType: keyboardType,
+      autofocus: autofocus,
       textCapitalization: textCapitalization ?? TextCapitalization.none,
       onChanged: onChanged,
       decoration: InputDecoration(

@@ -145,7 +145,10 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                     children: [
                       ...task.filteredTasks.map(
                         (taskModel) {
-                          return HistoryTaskCard(taskModel: taskModel);
+                          return HistoryTaskCard(
+                            key: ValueKey(taskModel.id),
+                            taskModel: taskModel,
+                          );
                         },
                       )
                     ],

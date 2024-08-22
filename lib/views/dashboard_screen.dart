@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kanban_board/utils/board_utils.dart';
 import 'package:kanban_board/views/add_task_screen.dart';
 import 'package:kanban_board/views/history_screen.dart';
+import 'package:kanban_board/widgets/confirmation_dialog.dart';
 import 'package:kanban_board/widgets/snakbar.dart';
 
 import '../components/drawer.dart';
@@ -11,6 +12,7 @@ import '../components/task_card.dart';
 import '../cubits/board_task/cubit.dart';
 import '../cubits/board_task/state.dart';
 import '../models/task_model.dart';
+import '../utils/default_boards_utils.dart';
 import 'add_board_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -87,10 +89,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 onMoreButtonClick: () async {
                   if (columnData.items.isEmpty) {
-                    await removeBoard(columnData.customData);
-                    context
-                        .read<BoardTaskCubit>()
-                        .deleteBoard(columnData.customData);
+                    await showConfirmationDialog(
+                        title: columnData.headerData.groupName,
+                        description:
+                            "Are you sure you want to delete this board",
+                        onYes: () async {
+                          Navigator.of(context).pop();
+                          await removeBoard(columnData.customData).then(
+                            (_) {
+                              context
+                                  .read<BoardTaskCubit>()
+                                  .deleteBoard(columnData.customData);
+                            },
+                          );
+                        });
                   } else {
                     showSnackBar(
                       "Board should be empty before delating",
@@ -112,8 +124,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showAddBoardDialog(context);
+        onPressed: () async {
+          await addDefaultBoards().then(
+            (shouldReturn) {
+              if (shouldReturn) {
+                return;
+              }
+              showAddBoardDialog(context);
+            },
+          );
         },
         tooltip: "Add new board",
         child: const Icon(Icons.add),

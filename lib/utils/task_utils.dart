@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kanban_board/constants/extras.dart';
+import 'package:kanban_board/cubits/history/cubit.dart';
 
 import '../cubits/board_task/cubit.dart';
 import '../models/task_model.dart';
@@ -81,12 +82,15 @@ List<TaskModel> getTasks({String? boardId}) {
 Future<bool> removeTask(TaskModel task) async {
   return showConfirmationDialog(
     title: task.title,
-    description: "ARe you sure you want to delete this task",
+    description: "Are you sure you want to delete this task",
     onYes: () async {
-      Navigator.of(generalContext).pop(true); //close dialog
-      await GetStorage(taskContainerKey).remove(task.id);
-
-      generalContext.read<BoardTaskCubit>().deleteTask(task);
+      return GetStorage(taskContainerKey).remove(task.id).then(
+        (_) {
+          generalContext.read<BoardTaskCubit>().deleteTask(task);
+          generalContext.read<HistoryCubit>().loadTasks();
+          Navigator.of(generalContext).pop(true); //close dialog
+        },
+      );
     },
   ).then(
     (value) {

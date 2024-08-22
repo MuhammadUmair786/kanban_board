@@ -95,6 +95,19 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
     );
   }
 
+  void addMultipleBoards(List<BoardModel> boardList) {
+    boardController.addGroups(boardList
+        .map(
+          (e) => AppFlowyGroupData(
+            id: e.id,
+            name: e.name,
+            customData: e,
+            items: [],
+          ),
+        )
+        .toList());
+  }
+
   void updateBoard(BoardModel boardModel) {
     List<AppFlowyGroupData<dynamic>> groupList =
         boardController.groupDatas.toList();
