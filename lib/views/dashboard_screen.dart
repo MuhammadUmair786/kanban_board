@@ -6,11 +6,13 @@ import 'package:kanban_board/views/add_task_screen.dart';
 import 'package:kanban_board/views/history_screen.dart';
 import 'package:kanban_board/widgets/confirmation_dialog.dart';
 import 'package:kanban_board/widgets/snakbar.dart';
+import 'package:localization/localization.dart';
 
 import '../components/drawer.dart';
 import '../components/task_card.dart';
 import '../cubits/board_task/cubit.dart';
 import '../cubits/board_task/state.dart';
+import '../localization/local_keys.dart';
 import '../models/task_model.dart';
 import '../utils/default_boards_utils.dart';
 import 'add_board_screen.dart';
@@ -66,7 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             footerBuilder: (context, columnData) {
               return AppFlowyGroupFooter(
                 icon: const Icon(Icons.add, size: 20),
-                title: const Text('New'),
+                title: Text(addTaskLK.i18n()),
                 height: 50,
                 margin: config.groupBodyPadding,
                 onAddButtonClick: () {
@@ -90,8 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   if (columnData.items.isEmpty) {
                     await showConfirmationDialog(
                         title: columnData.headerData.groupName,
-                        description:
-                            "Are you sure you want to delete this board",
+                        description: confirmDeleteLK.i18n(),
                         onYes: () async {
                           Navigator.of(context).pop();
                           await removeBoard(columnData.customData).then(
@@ -104,7 +105,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         });
                   } else {
                     showSnackBar(
-                      "Board should be empty before delating",
+                      boardMustBeEmptyBeforeDeletingLK.i18n(),
+                      isError: true,
                     );
                   }
                 },
@@ -134,7 +136,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
           );
         },
-        tooltip: "Add new board",
+        tooltip: addBoardLK.i18n(),
         child: const Icon(Icons.add),
       ),
     );

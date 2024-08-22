@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:kanban_board/localization/local_keys.dart';
+import 'package:localization/localization.dart';
 
 import '../constants/extras.dart';
 import '../helpers/formate_duration.dart';
@@ -52,9 +54,9 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
                             ),
                           ),
                         ),
-                        const Text(
-                          "Timespans",
-                          textScaler: TextScaler.linear(1.3),
+                        Text(
+                          timespansLK.i18n(),
+                          textScaler: const TextScaler.linear(1.3),
                         ),
                         const SizedBox(height: 10),
                         Container(
@@ -64,25 +66,25 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
                               bottom: BorderSide(),
                             ),
                           ),
-                          child: const Row(
+                          child: Row(
                             children: [
                               Expanded(
                                 child: Text(
-                                  "Start Time",
+                                  startTimeLK.i18n(),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  "End Time",
+                                  endTimeLK.i18n(),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  "Duration",
+                                  durationLK.i18n(),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -140,8 +142,8 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Text(
-                        "Total Duration: ",
+                      Text(
+                        "${totalTimespanLK.i18n()}: ",
                       ),
                       const SizedBox(width: 5),
                       Text(

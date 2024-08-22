@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:kanban_board/cubits/board_task/cubit.dart';
+import 'package:localization/localization.dart';
 
 import '../constants/extras.dart';
 import '../helpers/date_time_input.dart';
+import '../localization/local_keys.dart';
 import '../models/task_model.dart';
 import '../utils/task_utils.dart';
 import '../widgets/app_bar.dart';
@@ -88,10 +90,11 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
   @override
   Widget build(BuildContext context) {
-    String titleString = "${isUpdate ? "Update" : "Create"} Task";
+    // "${isUpdate ? "Update" : "Create"} Task"
+    String titleString = isUpdate ? updateLK.i18n() : addTaskLK.i18n();
 
     Widget actionButtonWidget = CustomElevatedButton(
-      label: isUpdate ? 'Update' : 'Create Event',
+      label: isUpdate ? updateLK.i18n() : addTaskLK.i18n(),
       icon: isUpdate ? const Icon(Icons.update) : const Icon(Icons.add),
       onPressed: () async {
         FocusScope.of(context).unfocus();
@@ -106,7 +109,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               (value) {
                 Navigator.of(context).pop();
                 context.read<BoardTaskCubit>().updateTask(value);
-                showSnackBar("Task update sucessfully");
+                showSnackBar(taskUpdatedSuccessfullyLK.i18n());
               },
             );
           } else {
@@ -119,7 +122,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               (value) {
                 Navigator.of(context).pop();
                 context.read<BoardTaskCubit>().addTask(value);
-                showSnackBar("Task added sucessfully");
+                showSnackBar(taskAddedSuccessfullyLK.i18n());
               },
             );
           }

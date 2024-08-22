@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:kanban_board/constants/theme.dart';
 import 'package:kanban_board/widgets/custom_text_feilds.dart';
+import 'package:localization/localization.dart';
 
 import '../components/task_timespan_dialog.dart';
 import '../constants/extras.dart';
 import '../helpers/formate_duration.dart';
+import '../localization/local_keys.dart';
 import '../models/task_model.dart';
 import '../utils/comment_utils.dart';
 import '../utils/task_utils.dart';
@@ -317,8 +319,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                           onPressed: () async {
                             await showConfirmationDialog(
                               title: "Delete Comment",
-                              description:
-                                  "Are you sure you want to delete comment",
+                              description: confirmDeleteLK.i18n(),
                               onYes: () async {
                                 Navigator.of(context).pop();
                                 await deleteComment(

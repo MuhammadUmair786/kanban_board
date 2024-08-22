@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 
 import '../../utils/custom_utils.dart';
 
@@ -22,6 +23,7 @@ class ThemeLocaleCubit extends Cubit<ThemeState> {
 
   Future<void> changeLocale(String languageCode) async {
     await saveLocalLocally(languageCode);
+    await Jiffy.setLocale(languageCode);
 
     emit(
       ThemeState(

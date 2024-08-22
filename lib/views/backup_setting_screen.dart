@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import '../backup/backup_controller.dart';
 import '../backup/config.dart';
 import '../constants/extras.dart';
+import '../localization/local_keys.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/show_loading.dart';
 import '../widgets/snakbar.dart';
@@ -123,37 +125,32 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    String titleText = "Backup Setting";
+    String titleText = cloudBackupLK.i18n();
     Widget desiredWidget = SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           BackupSettingCard(
             icon: Icons.file_upload_outlined,
-            title: "Backup",
-            subtitle: "",
+            title: uploadBackupLK.i18n(),
+            subtitle: savesDataToCloudLK.i18n(),
             onTap: () {
               exportDataToCloud();
             },
           ),
           BackupSettingCard(
             icon: Icons.download_outlined,
-            title: "Download",
-            subtitle: "",
+            title: restoreBackupLK.i18n(),
+            subtitle: retrievesDataFromCloudLK.i18n(),
             onTap: () {
               importDataFromCloudImplementation();
             },
           ),
           BackupSettingCard(
-            icon: Icons.remove_circle_outline_rounded,
-            title: "Delete",
-            subtitle: "",
+            icon: Icons.backspace_outlined,
+            title: deleteBackupLK.i18n(),
+            subtitle: deleteBackupWarningLK.i18n(),
             onTap: () {
               deletBackup();
             },
@@ -242,11 +239,19 @@ class BackupSettingCard extends StatelessWidget {
         child: ListTile(
           leading: Icon(
             icon,
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.primary,
+            size: 35,
           ),
-          title: Text(title),
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           subtitle: Text(subtitle),
           onTap: onTap,
+          contentPadding: const EdgeInsets.all(10),
         ),
       ),
     );

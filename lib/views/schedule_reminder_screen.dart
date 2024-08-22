@@ -5,8 +5,10 @@ import 'package:kanban_board/models/task_model.dart';
 import 'package:kanban_board/utils/notification_utils.dart';
 import 'package:kanban_board/utils/task_utils.dart';
 import 'package:kanban_board/widgets/fitted_text_widget.dart';
+import 'package:localization/localization.dart';
 
 import '../constants/extras.dart';
+import '../localization/local_keys.dart';
 import '../widgets/app_bar.dart';
 
 void showScheduleReminderDialog(BuildContext context) {
@@ -43,7 +45,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   @override
   Widget build(BuildContext context) {
     double thisScreenHeight = MediaQuery.of(context).size.height;
-    String titleText = "Schedule Reminders";
+    String titleText = upcomingTasksLK.i18n();
     Widget desiredWidget = FutureBuilder<List<PendingNotificationRequest>>(
       future: NotificationService.flutterLocalNotificationsPlugin
           .pendingNotificationRequests(),
@@ -67,7 +69,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
           return Container(
             height: thisScreenHeight * 0.45,
             alignment: Alignment.bottomCenter,
-            child: const Text("No upcomming notification"),
+            child: Text(noUpcomingTasksLK.i18n()),
           );
         }
         return ListView.builder(

@@ -6,8 +6,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:kanban_board/constants/extras.dart';
 import 'package:kanban_board/cubits/history/cubit.dart';
 import 'package:kanban_board/utils/notification_utils.dart';
+import 'package:localization/localization.dart';
 
 import '../cubits/board_task/cubit.dart';
+import '../localization/local_keys.dart';
 import '../models/task_model.dart';
 import '../helpers/time_based_id.dart';
 import '../widgets/confirmation_dialog.dart';
@@ -92,7 +94,7 @@ List<TaskModel> getTasks({String? boardId}) {
 Future<bool> removeTask(TaskModel task) async {
   return showConfirmationDialog(
     title: task.title,
-    description: "Are you sure you want to delete this task",
+    description: confirmDeleteLK.i18n(),
     onYes: () async {
       return GetStorage(taskContainerKey).remove(task.id).then(
         (_) {
@@ -114,8 +116,8 @@ Future<bool> removeTask(TaskModel task) async {
 
 Future<TaskModel?> removeReminderFromTask(TaskModel task) {
   return showConfirmationDialog(
-    title: "Dismiss Alarm",
-    description: "Are you sure you want to cancel this reminder",
+    title: dismissAlarmLK.i18n(),
+    description: confirmCancelReminderLK.i18n(),
     onYes: () async {
       return handleUpdatingOfTaskInLocalStorage(
               task.updateReminderTime(newScheduleAt: null))

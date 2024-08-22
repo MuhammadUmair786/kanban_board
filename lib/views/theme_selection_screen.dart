@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kanban_board/cubits/theme/cubit.dart';
+import 'package:kanban_board/localization/local_keys.dart';
+import 'package:localization/localization.dart';
 
 import '../constants/extras.dart';
 import '../constants/theme.dart';
@@ -39,7 +41,7 @@ class _ThemeWidgetState extends State<ThemeWidget> {
   String? filterdBoard;
   @override
   Widget build(BuildContext context) {
-    String titleText = "Configure Themes";
+    String titleText = appearanceLK.i18n();
 
     Widget desiredWidget = ListView.builder(
       itemCount: availbleThemes.length,
@@ -58,6 +60,7 @@ class _ThemeWidgetState extends State<ThemeWidget> {
               borderRadius: BorderRadius.circular(10),
               side: BorderSide(
                 color: themeData.colorScheme.primary,
+                width: 5,
               ),
             ),
             child: InkWell(

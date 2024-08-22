@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kanban_board/cubits/theme/cubit.dart';
+import 'package:localization/localization.dart';
 
 import '../../../localization/localization.dart';
 import '../../../widgets/fitted_text_widget.dart';
 import '../constants/extras.dart';
+import '../localization/local_keys.dart';
 import '../widgets/app_bar.dart';
 
 void showLocaleSelectionDialog(BuildContext context) {
@@ -40,7 +42,7 @@ class _LocaleWidgetState extends State<LocaleWidget> {
   String? filterdBoard;
   @override
   Widget build(BuildContext context) {
-    String titleText = "Language";
+    String titleText = languageLK.i18n();
 
     Widget desiredWidget = Builder(builder: (context) {
       return SingleChildScrollView(
@@ -49,7 +51,7 @@ class _LocaleWidgetState extends State<LocaleWidget> {
             LocaleSettingWidget(
               key: UniqueKey(),
               title: 'English',
-              locale: supportedLocales.first,
+              locale: supportedLocales[0],
               onChange: () {
                 setState(() {});
               },
@@ -57,7 +59,23 @@ class _LocaleWidgetState extends State<LocaleWidget> {
             LocaleSettingWidget(
               key: UniqueKey(),
               title: 'Français',
-              locale: supportedLocales.last,
+              locale: supportedLocales[1],
+              onChange: () {
+                setState(() {});
+              },
+            ),
+            LocaleSettingWidget(
+              key: UniqueKey(),
+              title: 'العربية',
+              locale: supportedLocales[2],
+              onChange: () {
+                setState(() {});
+              },
+            ),
+            LocaleSettingWidget(
+              key: UniqueKey(),
+              title: 'Deutsch',
+              locale: supportedLocales[3],
               onChange: () {
                 setState(() {});
               },

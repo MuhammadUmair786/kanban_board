@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kanban_board/localization/local_keys.dart';
 import 'package:kanban_board/views/backup_setting_screen.dart';
 import 'package:kanban_board/views/locale_selection_screen.dart';
 import 'package:kanban_board/views/theme_selection_screen.dart';
 import 'package:kanban_board/widgets/fitted_text_widget.dart';
+import 'package:localization/localization.dart';
 
 import '../views/schedule_reminder_screen.dart';
 
@@ -30,28 +32,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             ),
           ),
           DrawerItemWidget(
-            label: "Themes",
+            label: appearanceLK.i18n(),
             onTap: () {
               showThemeSelectionDialog(context);
             },
             leadingIcon: Icons.color_lens_outlined,
           ),
           DrawerItemWidget(
-            label: "Languages",
+            label: languageLK.i18n(),
             onTap: () {
               showLocaleSelectionDialog(context);
             },
             leadingIcon: Icons.language_outlined,
           ),
           DrawerItemWidget(
-            label: "Backup",
+            label: cloudBackupLK.i18n(),
             onTap: () {
               showBackupSettingDialog(context);
             },
             leadingIcon: Icons.backup_outlined,
           ),
           DrawerItemWidget(
-            label: "Upcomming Notifications",
+            label: upcomingTasksLK.i18n(),
             onTap: () {
               showScheduleReminderDialog(context);
             },
@@ -101,7 +103,9 @@ class DrawerItemWidget extends StatelessWidget {
           ),
           title: FittedBox(
             fit: BoxFit.scaleDown,
-            alignment: Alignment.topLeft,
+            alignment: Directionality.of(context) == TextDirection.ltr
+                ? Alignment.topLeft
+                : Alignment.topRight,
             child: Text(
               label,
             ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kanban_board/localization/local_keys.dart';
+import 'package:localization/localization.dart';
 
 import '../constants/extras.dart';
 import '../cubits/board_task/cubit.dart';
@@ -61,7 +63,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
 
   @override
   Widget build(BuildContext context) {
-    String titleString = "${isUpdate ? "Update" : "Create"} Board";
+    String titleString = isUpdate ? updateBoardLK.i18n() : addBoardLK.i18n();
 
     Future<void> handleSubmit() async {
       FocusScope.of(context).unfocus();
@@ -75,7 +77,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
             (updatedBoardModel) {
               context.read<BoardTaskCubit>().updateBoard(updatedBoardModel);
               Navigator.of(context).pop();
-              showSnackBar("Board Details update");
+              showSnackBar(boardUpdatedSuccessfullyLK.i18n());
             },
           );
         } else {
@@ -83,7 +85,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
             (value) {
               context.read<BoardTaskCubit>().addBoard(value);
               Navigator.of(context).pop();
-              showSnackBar("Board added sucessfully");
+              showSnackBar(boardAddedSuccessfullyLK.i18n());
             },
           );
         }
@@ -91,7 +93,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
     }
 
     Widget actionButtonWidget = CustomElevatedButton(
-      label: isUpdate ? 'Update' : 'Create Board',
+      label: titleString,
       icon: isUpdate ? const Icon(Icons.update) : const Icon(Icons.add),
       onPressed: () {
         handleSubmit();

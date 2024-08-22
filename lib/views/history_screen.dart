@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kanban_board/localization/local_keys.dart';
+import 'package:localization/localization.dart';
 
 import '../components/history_task_card.dart';
 import '../constants/extras.dart';
@@ -42,7 +44,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   String? filterdBoard;
   @override
   Widget build(BuildContext context) {
-    String titleText = "History";
+    String titleText = historyLK.i18n();
     Widget desiredWidget = BlocProvider(
       create: (context) => HistoryCubit(),
       child: BlocBuilder<HistoryCubit, HistoryState>(
@@ -66,7 +68,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                     children: [
                       Expanded(
                         child: CupertinoSearchTextField(
-                          placeholder: "Search here...",
+                          placeholder: searchHereLK.i18n(),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
