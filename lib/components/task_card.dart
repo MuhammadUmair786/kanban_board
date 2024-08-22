@@ -62,6 +62,9 @@ class _TaskCardState extends State<TaskCard> {
               if (widget.taskModel.isAnyPendingTimespan) ...[
                 const Text("to be contiue"),
               ],
+              if (widget.taskModel.isScheduled) ...[
+                const Text("Reminder"),
+              ],
               const Divider(
                 thickness: 0.1,
               ),

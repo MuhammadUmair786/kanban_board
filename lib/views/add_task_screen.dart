@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:kanban_board/cubits/board_task/cubit.dart';
 
 import '../constants/extras.dart';
+import '../helpers/date_time_input.dart';
 import '../models/task_model.dart';
 import '../utils/task_utils.dart';
 import '../widgets/app_bar.dart';
@@ -62,11 +64,25 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
     descriptionController =
         TextEditingController(text: widget.taskModel?.description);
+
+    reminderController = TextEditingController(
+        text: widget.taskModel == null
+            ? ""
+            : widget.taskModel!.isScheduled
+                ? getFormatedDate(widget.taskModel!.scheduleAt!)
+                : "");
+    reminderDate = widget.taskModel?.scheduleAt;
+  }
+
+  String getFormatedDate(DateTime dateTime) {
+    return Jiffy.parseFromDateTime(dateTime).yMMMEdjm;
   }
 
   bool isUpdate = false;
   late TextEditingController titleController;
   late TextEditingController descriptionController;
+  late TextEditingController reminderController;
+  DateTime? reminderDate;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -94,9 +110,12 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               },
             );
           } else {
-            await addTask(widget.boardId, titleController.text.trim(),
-                    descriptionController.text.trim())
-                .then(
+            await addTask(
+              widget.boardId,
+              titleController.text.trim(),
+              descriptionController.text.trim(),
+              reminderDate,
+            ).then(
               (value) {
                 Navigator.of(context).pop();
                 context.read<BoardTaskCubit>().addTask(value);
@@ -129,6 +148,35 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               minLines: 5,
               maxlines: 10,
               textInputAction: TextInputAction.newline,
+            ),
+            InkWell(
+              onTap: () async {
+                await getDateTimeInput(DateTime.now(),
+                        DateTime.now().add(const Duration(days: 60)))
+                    .then(
+                  (DateTime? value) {
+                    if (value != null) {
+                      if (value.isBefore(DateTime.now())) {
+                        showSnackBar(
+                            "Reminders cannot be set for past dates. Please select a future date.");
+                      } else {
+                        reminderController.text = getFormatedDate(value);
+                        reminderDate = value;
+                      }
+                    }
+                  },
+                );
+              },
+              child: AbsorbPointer(
+                child: CustomTextFormFieldWithLabel(
+                  labelText: "Alarm Date",
+                  hintText: "Set reminder date",
+                  controller: reminderController,
+                  validator: (_) {
+                    return null;
+                  },
+                ),
+              ),
             ),
             const SizedBox(height: 10),
             if (!isMobile) actionButtonWidget,

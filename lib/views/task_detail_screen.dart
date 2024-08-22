@@ -143,6 +143,22 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   showTaskTimeSpanDialog(taskModel);
                 }),
           ],
+          if (taskModel.isScheduled) ...[
+            Text(
+              "Alarm scheduled at: ${Jiffy.parseFromDateTime(taskModel.scheduleAt!).yMMMEdjm}",
+            ),
+            CustomElevatedButton(
+                label: "Remove Reminder",
+                onPressed: () async {
+                  await removeReminderFromTask(taskModel).then(
+                    (value) {
+                      if (value != null) {
+                        updateThisScreenTask(value);
+                      }
+                    },
+                  );
+                }),
+          ],
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

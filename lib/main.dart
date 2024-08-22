@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kanban_board/constants/extras.dart';
 import 'package:kanban_board/cubits/history/cubit.dart';
 import 'package:kanban_board/routes/names.dart';
+import 'package:kanban_board/utils/notification_utils.dart';
 import 'package:localization/localization.dart';
 
 import 'cubits/board_task/cubit.dart';
@@ -12,11 +13,17 @@ import 'cubits/theme/cubit.dart';
 import 'localization/localization.dart';
 import 'routes/route_list.dart';
 import 'utils/local_storage_utils.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
 
 Future<void> main() async {
   // final WidgetsBinding widgetsBinding =
   WidgetsFlutterBinding.ensureInitialized();
-  await initilizeGetStorageContainer();
+  tz.initializeTimeZones();
+
+  await Future.wait([
+    NotificationService().initNotification(),
+    initilizeGetStorageContainer(),
+  ]);
   runApp(const MyApp());
 }
 

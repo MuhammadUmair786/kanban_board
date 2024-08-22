@@ -2,15 +2,13 @@
 
  
 
-// Helping: 
-    context.read<BoardTaskCubit>().boardController;
+// Helping:  context.read<BoardTaskCubit>().boardController;
 
 // TODO: allow task editing (title, description)
 
 // TODO: use workmanager and scheduel notification if any task is pending
 
 // TODO: firebase analytics
-
 
 lias androiddebugkey -storepass android -keypass android
 Alias name: androiddebugkey

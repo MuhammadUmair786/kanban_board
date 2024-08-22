@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kanban_board/constants/extras.dart';
 import 'package:kanban_board/cubits/history/cubit.dart';
+import 'package:kanban_board/utils/notification_utils.dart';
 
 import '../cubits/board_task/cubit.dart';
 import '../models/task_model.dart';
@@ -13,11 +14,9 @@ import '../widgets/confirmation_dialog.dart';
 
 String taskContainerKey = 'TaskContainer';
 
-Future<TaskModel> addTask(
-    String boardId, String title, String description) async {
-  List<TaskModel> existingTaskList = getTasks(boardId: boardId)
-      .where((element) => element.isCompleted)
-      .toList();
+Future<TaskModel> addTask(String boardId, String title, String description,
+    DateTime? reminderDate) async {
+  List<TaskModel> existingTaskList = getTasks(boardId: boardId).toList();
   int maxOrder = existingTaskList.isEmpty
       ? -1
       : existingTaskList
@@ -34,10 +33,19 @@ Future<TaskModel> addTask(
     timespanList: [],
     createdAt: DateTime.now(),
     updatedAt: null,
-    completedAt: null,
+    scheduleAt: reminderDate,
   );
   // log(jsonEncode(tempTask.toJson()));
   await GetStorage(taskContainerKey).write(id, tempTask.toJson());
+
+  if (reminderDate != null) {
+    NotificationService.scheduleTaskNotification(
+      id: int.parse(id),
+      title: title,
+      description: description,
+      selectedDateTime: reminderDate,
+    );
+  }
 
   return tempTask;
 }
@@ -89,12 +97,37 @@ Future<bool> removeTask(TaskModel task) async {
           generalContext.read<BoardTaskCubit>().deleteTask(task);
           generalContext.read<HistoryCubit>().loadTasks();
           Navigator.of(generalContext).pop(true); //close dialog
+          if (task.isScheduled) {
+            NotificationService.deleteReminder(int.parse(task.id));
+          }
         },
       );
     },
   ).then(
     (value) {
       return value ?? false;
+    },
+  );
+}
+
+Future<TaskModel?> removeReminderFromTask(TaskModel task) {
+  return showConfirmationDialog(
+    title: "Dismiss Alarm",
+    description: "Are you sure you want to cancel this reminder",
+    onYes: () async {
+      return handleUpdatingOfTaskInLocalStorage(
+              task.updateReminderTime(newScheduleAt: null))
+          .then(
+        (newValue) {
+          NotificationService.deleteReminder(int.parse(newValue.id));
+          generalContext.read<BoardTaskCubit>().updateTask(newValue);
+          Navigator.of(generalContext).pop(newValue);
+        },
+      );
+    },
+  ).then(
+    (value) {
+      return value;
     },
   );
 }
@@ -107,6 +140,7 @@ Future<TaskModel> updateTask(
   int? order,
   List<TimespanModel>? timeSpanList,
   List<CommentModel>? commentList,
+  DateTime? reminderDate,
 }) async {
   TaskModel tempTask = task.update(
     newBoardId: boardId,
@@ -116,6 +150,7 @@ Future<TaskModel> updateTask(
     newTimeSpanList: timeSpanList,
     newCommentList: commentList,
     newUpdatedAt: DateTime.now(),
+    newScheduleAt: reminderDate,
   );
   return handleUpdatingOfTaskInLocalStorage(tempTask);
 }

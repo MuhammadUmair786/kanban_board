@@ -4,6 +4,8 @@ import 'package:kanban_board/views/locale_selection_screen.dart';
 import 'package:kanban_board/views/theme_selection_screen.dart';
 import 'package:kanban_board/widgets/fitted_text_widget.dart';
 
+import '../views/schedule_reminder_screen.dart';
+
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
 
@@ -43,6 +45,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             label: "Backup",
             onTap: () {
               showBackupSettingDialog(context);
+            },
+          ),
+          DrawerItemWidget(
+            label: "Upcomming Notifications",
+            onTap: () {
+              showScheduleReminderDialog(context);
             },
           ),
         ],

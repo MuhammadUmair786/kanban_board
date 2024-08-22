@@ -63,8 +63,7 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
       List<TaskModel> taskList = getTasks();
       for (BoardModel board in boardList) {
         List<AppFlowyGroupItem> itemList = List.from(
-          taskList.where((element) =>
-              element.boardId == board.id && element.isCompleted == false),
+          taskList.where((element) => element.boardId == board.id),
         );
 
         itemList.sort(

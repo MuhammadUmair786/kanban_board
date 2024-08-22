@@ -14,9 +14,12 @@ class TaskModel extends AppFlowyGroupItem {
   final List<TimespanModel> timespanList;
   final DateTime createdAt;
   final DateTime? updatedAt;
-  final DateTime? completedAt;
 
-  bool get isCompleted => completedAt != null;
+  /// reminder
+  final DateTime? scheduleAt;
+
+  bool get isScheduled =>
+      scheduleAt != null && scheduleAt!.isAfter(DateTime.now().toUtc());
 
   @override
   String toString() => id;
@@ -54,7 +57,7 @@ class TaskModel extends AppFlowyGroupItem {
     required this.timespanList,
     required this.createdAt,
     required this.updatedAt,
-    required this.completedAt,
+    required this.scheduleAt,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) => TaskModel(
@@ -75,7 +78,7 @@ class TaskModel extends AppFlowyGroupItem {
         ),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.tryParse(json["updatedAt"] ?? ''),
-        completedAt: DateTime.tryParse(json["completedAt"] ?? ''),
+        scheduleAt: DateTime.tryParse(json["scheduleAt"] ?? ''),
       );
 
   Map<String, dynamic> toJson() => {
@@ -88,7 +91,7 @@ class TaskModel extends AppFlowyGroupItem {
         "timespanList": timespanList.map((e) => e.toJson()).toList(),
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
-        "completedAt": completedAt?.toIso8601String(),
+        "scheduleAt": scheduleAt?.toIso8601String(),
       };
 
   factory TaskModel.fromDummyMeasum() {
@@ -102,7 +105,7 @@ class TaskModel extends AppFlowyGroupItem {
       timespanList: [],
       createdAt: DateTime(1000),
       updatedAt: null,
-      completedAt: null,
+      scheduleAt: null,
     );
   }
 
@@ -114,7 +117,7 @@ class TaskModel extends AppFlowyGroupItem {
     List<CommentModel>? newCommentList,
     List<TimespanModel>? newTimeSpanList,
     DateTime? newUpdatedAt,
-    DateTime? newCompletedAt,
+    DateTime? newScheduleAt,
   }) {
     return TaskModel(
       id: id,
@@ -126,7 +129,24 @@ class TaskModel extends AppFlowyGroupItem {
       timespanList: newTimeSpanList ?? timespanList,
       createdAt: createdAt,
       updatedAt: newUpdatedAt ?? updatedAt,
-      completedAt: newCompletedAt ?? completedAt,
+      scheduleAt: newScheduleAt ?? scheduleAt,
+    );
+  }
+
+  TaskModel updateReminderTime({
+    required DateTime? newScheduleAt,
+  }) {
+    return TaskModel(
+      id: id,
+      boardId: boardId,
+      order: order,
+      title: title,
+      description: description,
+      commentList: commentList,
+      timespanList: timespanList,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      scheduleAt: newScheduleAt,
     );
   }
 }

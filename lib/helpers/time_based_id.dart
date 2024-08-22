@@ -1,4 +1,3 @@
-/// DateTime.now().microsecondsSinceEpoch
 String getTimeBasedId() {
-  return DateTime.now().microsecondsSinceEpoch.toString();
+  return DateTime.now().microsecondsSinceEpoch.remainder(1 << 31).toString();
 }

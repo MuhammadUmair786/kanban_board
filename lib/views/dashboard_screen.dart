@@ -106,7 +106,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   } else {
                     showSnackBar(
                       "Board should be empty before delating",
-                      backgroundColor: Colors.red,
                     );
                   }
                 },
