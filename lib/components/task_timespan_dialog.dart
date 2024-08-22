@@ -17,7 +17,7 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           margin: const EdgeInsets.all(20),
           child: DefaultTextStyle(
@@ -25,108 +25,119 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
               decoration: TextDecoration.none,
               color: Colors.black,
             ),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: SizedBox(
-                        width: 25,
-                        height: 25,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: const Icon(Icons.close),
-                          iconSize: 18,
-                          padding: EdgeInsets.zero,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Text(
-                    "Timespans",
-                    textScaler: TextScaler.linear(1.3),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(),
-                      ),
-                    ),
-                    child: const Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Expanded(
-                          child: Text(
-                            "Start Time",
-                            textAlign: TextAlign.center,
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: SizedBox(
+                              width: 25,
+                              height: 25,
+                              child: IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                icon: const Icon(Icons.close),
+                                iconSize: 18,
+                                padding: EdgeInsets.zero,
+                              ),
+                            ),
                           ),
                         ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            "End Time",
-                            textAlign: TextAlign.center,
-                          ),
+                        const Text(
+                          "Timespans",
+                          textScaler: TextScaler.linear(1.3),
                         ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            "Duration",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ...taskModel.timespanList
-                      .where(
-                        (element) => element.endTime != null,
-                      )
-                      .map(
-                        (e) => Container(
+                        const SizedBox(height: 10),
+                        Container(
                           padding: const EdgeInsets.only(bottom: 5),
                           decoration: const BoxDecoration(
                             border: Border(
                               bottom: BorderSide(),
                             ),
                           ),
-                          child: Row(
+                          child: const Row(
                             children: [
                               Expanded(
                                 child: Text(
-                                  "${Jiffy.parseFromDateTime(e.startTime).yMMMd}\n${Jiffy.parseFromDateTime(e.startTime).jm}",
+                                  "Start Time",
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              const SizedBox(width: 5),
+                              SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  "${Jiffy.parseFromDateTime(e.endTime!).yMMMd}\n${Jiffy.parseFromDateTime(e.endTime!).jm}",
+                                  "End Time",
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              const SizedBox(width: 5),
+                              SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  formatDuration(
-                                    e.endTime!.difference(e.startTime),
-                                  ),
+                                  "Duration",
                                   textAlign: TextAlign.center,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                  const SizedBox(height: 5),
-                  Row(
+                        ...taskModel.timespanList
+                            .where(
+                              (element) => element.endTime != null,
+                            )
+                            .map(
+                              (e) => Container(
+                                padding:
+                                    const EdgeInsets.only(bottom: 7, top: 7),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "${Jiffy.parseFromDateTime(e.startTime).yMMMd}\n${Jiffy.parseFromDateTime(e.startTime).jm}",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        "${Jiffy.parseFromDateTime(e.endTime!).yMMMd}\n${Jiffy.parseFromDateTime(e.endTime!).jm}",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        formatDuration(
+                                          e.endTime!.difference(e.startTime),
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       const Text(
@@ -141,8 +152,8 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
                       )
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

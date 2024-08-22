@@ -21,4 +21,4 @@ const double dialogMaxWidth = 700;
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
-BuildContext generalContext = navigatorKey.currentState!.context;
+BuildContext generalContext = navigatorKey.currentState!.overlay!.context;

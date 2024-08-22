@@ -21,7 +21,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         children: [
           Container(
             height: 150,
-            color: Colors.orange,
+            color: Theme.of(context).colorScheme.primary,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: const FittedText(
               "Kanban Board",
@@ -34,24 +34,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             onTap: () {
               showThemeSelectionDialog(context);
             },
+            leadingIcon: Icons.color_lens_outlined,
           ),
           DrawerItemWidget(
             label: "Languages",
             onTap: () {
               showLocaleSelectionDialog(context);
             },
+            leadingIcon: Icons.language_outlined,
           ),
           DrawerItemWidget(
             label: "Backup",
             onTap: () {
               showBackupSettingDialog(context);
             },
+            leadingIcon: Icons.backup_outlined,
           ),
           DrawerItemWidget(
             label: "Upcomming Notifications",
             onTap: () {
               showScheduleReminderDialog(context);
             },
+            leadingIcon: Icons.notification_add_outlined,
           ),
         ],
       ),
@@ -93,6 +97,7 @@ class DrawerItemWidget extends StatelessWidget {
           dense: true,
           leading: Icon(
             leadingIcon,
+            color: Theme.of(context).colorScheme.primary,
           ),
           title: FittedBox(
             fit: BoxFit.scaleDown,

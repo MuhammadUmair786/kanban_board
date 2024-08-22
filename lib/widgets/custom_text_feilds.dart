@@ -152,14 +152,11 @@ class CustomTextFormFieldWithLabel extends StatelessWidget {
           padding: const EdgeInsets.only(left: 7),
           child: Text(
             labelText,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
         hintText: hintText ?? labelText,
-
         isDense: true,
-        // suffixIconColor: Colors.black54,
         suffixIcon: suffixIconPath.isNotEmpty
             ? Padding(
                 padding: const EdgeInsets.all(10),

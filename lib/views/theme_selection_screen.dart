@@ -10,14 +10,14 @@ void showThemeSelectionDialog(BuildContext context) {
   if (isMobile) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const HistoryWidget(),
+        builder: (BuildContext context) => const ThemeWidget(),
       ),
     );
   } else {
     showGeneralDialog(
       context: context,
       pageBuilder: (context, animation, secondaryAnimation) {
-        return const HistoryWidget();
+        return const ThemeWidget();
       },
       barrierLabel: 'showThemeSelectionDialog',
       barrierDismissible: true,
@@ -25,88 +25,57 @@ void showThemeSelectionDialog(BuildContext context) {
   }
 }
 
-class HistoryWidget extends StatefulWidget {
-  const HistoryWidget({
+class ThemeWidget extends StatefulWidget {
+  const ThemeWidget({
     super.key,
   });
 
   @override
-  State<HistoryWidget> createState() => _HistoryWidgetState();
+  State<ThemeWidget> createState() => _ThemeWidgetState();
 }
 
-class _HistoryWidgetState extends State<HistoryWidget> {
+class _ThemeWidgetState extends State<ThemeWidget> {
   TextEditingController searchController = TextEditingController();
   String? filterdBoard;
   @override
   Widget build(BuildContext context) {
     String titleText = "Configure Themes";
 
-    Widget buildColorPreview(Color color) {
-      return Container(
-        height: 30,
-        width: 30,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-      );
-    }
-
     Widget desiredWidget = ListView.builder(
       itemCount: availbleThemes.length,
+      padding: const EdgeInsets.all(20),
       itemBuilder: (context, index) {
         // Get the theme name and data
         String themeName = availbleThemes.keys.elementAt(index);
         ThemeData themeData = availbleThemes.values.elementAt(index);
 
-        return Card(
-          elevation: 4.0,
-          margin: const EdgeInsets.all(8.0),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(16.0),
-            title: Text(
-              themeName,
-              style: themeData.textTheme.titleLarge,
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Material(
+            elevation: 6,
+            color: themeData.colorScheme.secondary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(
+                color: themeData.colorScheme.primary,
+              ),
             ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                Text(
-                  "Primary Color Preview:",
-                  style: themeData.textTheme.bodyLarge,
+            child: InkWell(
+              onTap: () {
+                context.read<ThemeLocaleCubit>().changeTheme(themeName);
+              },
+              borderRadius: BorderRadius.circular(10),
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Text(
+                  themeName,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 25,
+                  ),
                 ),
-                const SizedBox(height: 5),
-                buildColorPreview(themeData.colorScheme.primary),
-                const SizedBox(height: 10),
-                Text(
-                  "Text Example:",
-                  style: themeData.textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  "This is a sample text.",
-                  style: themeData.textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "Button Example:",
-                  style: themeData.textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 5),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<ThemeLocaleCubit>().changeTheme(themeName);
-                  },
-                  style: themeData.elevatedButtonTheme.style,
-                  child: const Text('Click Me'),
-                ),
-              ],
+              ),
             ),
-            onTap: () {
-              // Apply the selected theme
-              // You can handle theme change logic here
-            },
           ),
         );
       },

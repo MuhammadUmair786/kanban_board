@@ -47,7 +47,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: BlocBuilder<BoardTaskCubit, BoardTaskState>(
         builder: (context, state) {
           const config = AppFlowyBoardConfig(
-            groupBackgroundColor: Color.fromRGBO(247, 248, 252, 1),
+            groupBackgroundColor: Colors.white,
             stretchGroupHeight: true,
           );
 
@@ -85,7 +85,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 moreIcon: const Icon(
                   Icons.delete_forever_outlined,
                   size: 20,
-                  color: Colors.red,
                 ),
                 onMoreButtonClick: () async {
                   if (columnData.items.isEmpty) {
@@ -110,8 +109,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   }
                 },
                 onAddButtonClick: () {
-                  showAddBoardDialog(context,
-                      boardModel: columnData.customData);
+                  showAddBoardDialog(
+                    context,
+                    boardModel: columnData.customData,
+                  );
                 },
                 height: 50,
                 margin: config.groupBodyPadding,

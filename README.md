@@ -57,3 +57,14 @@ git clone https://github.com/yourusername/kanban-board.git
 cd kanban-board
 flutter pub get
 flutter run
+
+
+
+// make border around clickable icons -> filled-border color should have 50% opactity
+
+
+coment box:
+
+make diverd lighetr - diveeder have padding around
+make delet button to top-right
+remove border

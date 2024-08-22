@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kanban_board/cubits/theme/cubit.dart';
-import 'package:kanban_board/utils/custom_utils.dart';
 
 import '../../../localization/localization.dart';
 import '../../../widgets/fitted_text_widget.dart';
@@ -41,33 +40,32 @@ class _LocaleWidgetState extends State<LocaleWidget> {
   String? filterdBoard;
   @override
   Widget build(BuildContext context) {
-    String titleText = "Configure Themes";
+    String titleText = "Language";
 
-    Widget buildColorPreview(Color color) {
-      return Container(
-        height: 30,
-        width: 30,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(5.0),
+    Widget desiredWidget = Builder(builder: (context) {
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            LocaleSettingWidget(
+              key: UniqueKey(),
+              title: 'English',
+              locale: supportedLocales.first,
+              onChange: () {
+                setState(() {});
+              },
+            ),
+            LocaleSettingWidget(
+              key: UniqueKey(),
+              title: 'Français',
+              locale: supportedLocales.last,
+              onChange: () {
+                setState(() {});
+              },
+            ),
+          ],
         ),
       );
-    }
-
-    Widget desiredWidget = SingleChildScrollView(
-      child: Column(
-        children: [
-          LocaleSettingWidget(
-            title: 'English',
-            locale: supportedLocales.first,
-          ),
-          LocaleSettingWidget(
-            title: 'Français',
-            locale: supportedLocales.last,
-          ),
-        ],
-      ),
-    );
+    });
 
     if (isMobile) {
       return Scaffold(
@@ -124,10 +122,12 @@ class LocaleSettingWidget extends StatefulWidget {
     super.key,
     required this.title,
     required this.locale,
+    required this.onChange,
   });
 
   final String title;
   final Locale locale;
+  final void Function() onChange;
 
   @override
   State<LocaleSettingWidget> createState() => _LocaleSettingWidgetState();
@@ -136,7 +136,8 @@ class LocaleSettingWidget extends StatefulWidget {
 class _LocaleSettingWidgetState extends State<LocaleSettingWidget> {
   @override
   Widget build(BuildContext context) {
-    bool isCurrent = getSavedLocale() == widget.locale;
+    bool isCurrent =
+        context.read<ThemeLocaleCubit>().state.locale == widget.locale;
     return Container(
       decoration: const BoxDecoration(
         border: Border(
@@ -151,14 +152,16 @@ class _LocaleSettingWidgetState extends State<LocaleSettingWidget> {
           leading: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                  color: isCurrent ? Colors.green : const Color(0xFF000000)),
+                  color: isCurrent
+                      ? Theme.of(context).colorScheme.primary
+                      : const Color(0xFF000000)),
               borderRadius: BorderRadius.circular(10),
             ),
             padding: const EdgeInsets.all(5),
             child: FittedText(
               widget.locale.countryCode ?? '--',
               style: TextStyle(
-                color: isCurrent ? Colors.green : null,
+                color: isCurrent ? Theme.of(context).colorScheme.primary : null,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -173,20 +176,22 @@ class _LocaleSettingWidgetState extends State<LocaleSettingWidget> {
             child: Text(
               widget.title,
               style: TextStyle(
-                color: isCurrent ? Colors.green : null,
+                color: isCurrent ? Theme.of(context).colorScheme.primary : null,
               ),
             ),
           ),
           trailing: isCurrent
-              ? const Icon(
+              ? Icon(
                   Icons.check_circle,
-                  color: Colors.green,
+                  color: Theme.of(context).colorScheme.primary,
                 )
               : null,
           onTap: () {
             context
                 .read<ThemeLocaleCubit>()
                 .changeLocale(widget.locale.languageCode);
+
+            widget.onChange();
           },
         ),
       ),

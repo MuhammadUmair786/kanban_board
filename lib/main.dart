@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeLocaleCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp(
-            key: ValueKey(state.themeData.hashCode + state.locale.hashCode),
+            // key: ValueKey(state.themeData.hashCode + state.locale.hashCode),
             title: 'Kanban Board',
             navigatorKey: navigatorKey,
             theme: state.themeData,

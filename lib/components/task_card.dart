@@ -17,68 +17,93 @@ class TaskCard extends StatefulWidget {
 class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), side: const BorderSide()),
-      child: InkWell(
-        onTap: () {
-          showTaskDetailDialog(context, widget.taskModel);
-        },
-        child: Container(
-          padding: const EdgeInsets.all(5),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.taskModel.title,
-                textScaler: const TextScaler.linear(1.2),
-              ),
-              Text(widget.taskModel.description),
-              if (widget.taskModel.getExistingDuration != Duration.zero) ...[
-                Row(
-                  children: [
-                    Flexible(
-                      child: FittedText(
-                        "Time Spend: ${formatDuration(
-                          widget.taskModel.getExistingDuration,
-                        )}",
-                        alignment: Alignment.centerLeft,
-                      ),
-                    ),
-                    if (widget.taskModel.timespanList.isNotEmpty)
-                      IconButton(
-                        onPressed: () {
-                          showTaskTimeSpanDialog(widget.taskModel);
-                        },
-                        tooltip: "Show Time Span",
-                        icon: const Icon(
-                          Icons.timeline,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Material(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        // color: Theme.of(context).scaffoldBackgroundColor,
+        child: InkWell(
+          onTap: () {
+            showTaskDetailDialog(context, widget.taskModel);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.taskModel.title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Text(
+                  widget.taskModel.description,
+                  maxLines: 3,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (widget.taskModel.getExistingDuration != Duration.zero) ...[
+                  Row(
+                    children: [
+                      Flexible(
+                        child: FittedText(
+                          "Time Spend: ${formatDuration(
+                            widget.taskModel.getExistingDuration,
+                          )}",
+                          alignment: Alignment.centerLeft,
                         ),
-                      )
-                  ],
-                )
-              ],
-              if (widget.taskModel.isAnyPendingTimespan) ...[
-                const Text("to be contiue"),
-              ],
-              if (widget.taskModel.isScheduled) ...[
-                const Text("Reminder"),
-              ],
-              const Divider(
-                thickness: 0.1,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("${widget.taskModel.commentList.length} comments"),
-                  // Text(
-                  //   widget.taskModel.order.toString(),
-                  //   textScaler: const TextScaler.linear(2),
-                  // )
+                      ),
+                      if (widget.taskModel.timespanList.isNotEmpty)
+                        IconButton(
+                          onPressed: () {
+                            showTaskTimeSpanDialog(widget.taskModel);
+                          },
+                          tooltip: "Show Time Span",
+                          icon: const Icon(
+                            Icons.timeline,
+                          ),
+                        )
+                    ],
+                  )
                 ],
-              ),
-            ],
+                const Divider(
+                  thickness: 0.1,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.mode_comment_outlined,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      "${widget.taskModel.commentList.length}",
+                    ),
+                    const Spacer(),
+                    if (widget.taskModel.isAnyPendingTimespan) ...[
+                      const Icon(
+                        Icons.play_circle_outline,
+                        size: 20,
+                      ),
+                    ],
+                    const SizedBox(width: 5),
+                    if (widget.taskModel.isScheduled) ...[
+                      const Icon(
+                        Icons.watch_later_outlined,
+                        size: 20,
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

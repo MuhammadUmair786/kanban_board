@@ -6,7 +6,7 @@ import '../backup/backup_controller.dart';
 import '../backup/config.dart';
 import '../constants/extras.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/custom_buttons.dart';
+import '../widgets/show_loading.dart';
 import '../widgets/snakbar.dart';
 
 void showBackupSettingDialog(BuildContext context) {
@@ -41,7 +41,8 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
   TextEditingController searchController = TextEditingController();
   String? filterdBoard;
 
-  Future<void> exportDataToCloud({required void Function()? onFinish}) async {
+  Future<void> exportDataToCloud() async {
+    showLoading();
     await canAccessDrive().then(
       (isAllow) async {
         if (isAllow) {
@@ -52,11 +53,8 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
             ),
           )
               .then((_) async {
+            dismissLoadingWidget();
             showSnackBar('Data back up sucessfully');
-
-            if (onFinish != null) {
-              onFinish();
-            }
           }).onError((e, x) {
             log(e.toString());
             log(x.toString());
@@ -64,6 +62,7 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
             showSnackBar('Fail to backup data');
           });
         } else {
+          dismissLoadingWidget();
           showSnackBar('Unathorize');
         }
       },
@@ -71,12 +70,14 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
   }
 
   Future<void> importDataFromCloudImplementation() async {
+    showLoading();
     await canAccessDrive().then(
       (isAllow) async {
         if (isAllow) {
           await backUpController.googleDriveRepository
               .downloadBackUpFile()
               .then((String? importedDataString) async {
+            dismissLoadingWidget();
             if (importedDataString == null || importedDataString.isEmpty) {
               showSnackBar('No backup found');
             } else {
@@ -85,6 +86,7 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
               await initilizeDataFromBackupJSON(importedJsonData);
             }
           }).onError((e, x) {
+            dismissLoadingWidget();
             log(e.toString());
             log(x.toString());
             showSnackBar(
@@ -92,10 +94,32 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
             );
           });
         } else {
+          dismissLoadingWidget();
           showSnackBar('Unathorize');
         }
       },
     );
+  }
+
+  Future<void> deletBackup() async {
+    showLoading();
+    await canAccessDrive().then((isAllow) async {
+      if (isAllow) {
+        await backUpController.googleDriveRepository.deleteBackUp().then(
+          (isDelete) {
+            dismissLoadingWidget();
+            if (isDelete) {
+              showSnackBar('Back up deleted sucessfuly');
+            } else {
+              showSnackBar('Fail to delete back up', isError: true);
+            }
+          },
+        );
+      } else {
+        dismissLoadingWidget();
+        showSnackBar('Unathorize');
+      }
+    });
   }
 
   @override
@@ -107,29 +131,33 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
   Widget build(BuildContext context) {
     String titleText = "Backup Setting";
     Widget desiredWidget = SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CustomElevatedButton(
-                label: "Backup",
-                onPressed: () {
-                  exportDataToCloud(onFinish: () {});
-                },
-                icon: const Icon(Icons.file_upload_outlined),
-                width: 150,
-              ),
-              CustomElevatedButton(
-                label: "Download",
-                onPressed: () {
-                  importDataFromCloudImplementation();
-                },
-                icon: const Icon(Icons.download_outlined),
-                width: 150,
-              ),
-            ],
-          )
+          BackupSettingCard(
+            icon: Icons.file_upload_outlined,
+            title: "Backup",
+            subtitle: "",
+            onTap: () {
+              exportDataToCloud();
+            },
+          ),
+          BackupSettingCard(
+            icon: Icons.download_outlined,
+            title: "Download",
+            subtitle: "",
+            onTap: () {
+              importDataFromCloudImplementation();
+            },
+          ),
+          BackupSettingCard(
+            icon: Icons.remove_circle_outline_rounded,
+            title: "Delete",
+            subtitle: "",
+            onTap: () {
+              deletBackup();
+            },
+          ),
         ],
       ),
     );
@@ -181,5 +209,46 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
         ),
       );
     }
+  }
+}
+
+class BackupSettingCard extends StatelessWidget {
+  const BackupSettingCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
+  });
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Material(
+        color: Colors.white,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 1.5,
+          ),
+        ),
+        child: ListTile(
+          leading: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+          title: Text(title),
+          subtitle: Text(subtitle),
+          onTap: onTap,
+        ),
+      ),
+    );
   }
 }

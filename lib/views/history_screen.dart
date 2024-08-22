@@ -67,6 +67,10 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                       Expanded(
                         child: CupertinoSearchTextField(
                           placeholder: "Search here...",
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           onChanged: (value) {
                             context.read<HistoryCubit>().searchAndFilterTasks(
                                   searchText: value.trim(),
@@ -97,16 +101,22 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                               });
                             }
                           },
+                          color: Theme.of(context).colorScheme.primary,
+                          elevation: 8,
                           itemBuilder: (context) {
                             return getBoards().map(
                               (e) {
                                 return PopupMenuItem(
                                   value: e.id,
+                                  height: 30,
                                   child: Text(
                                     e.name,
                                     style: TextStyle(
-                                      color: e.id == filterdBoard
-                                          ? Colors.blue
+                                      decoration: e.id == filterdBoard
+                                          ? TextDecoration.underline
+                                          : TextDecoration.none,
+                                      fontStyle: e.id == filterdBoard
+                                          ? FontStyle.italic
                                           : null,
                                     ),
                                   ),
@@ -114,26 +124,38 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                               },
                             ).toList();
                           },
-                          child: Stack(
-                            children: [
-                              const Icon(
-                                Icons.filter_alt_sharp,
-                                size: 28,
-                              ),
-                              if (filterdBoard != null)
-                                Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: Container(
-                                    width: 10,
-                                    height: 10,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
-                                    ),
+                          child: Material(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.5),
+                            elevation: 8,
+                            shadowColor: Theme.of(context).colorScheme.primary,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Stack(
+                                children: [
+                                  const Icon(
+                                    Icons.filter_alt_sharp,
+                                    size: 28,
                                   ),
-                                ),
-                            ],
+                                  if (filterdBoard != null)
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       }),
@@ -142,7 +164,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

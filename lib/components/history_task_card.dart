@@ -81,25 +81,31 @@ class _HistoryTaskCardState extends State<HistoryTaskCard> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Material(
+        elevation: 5,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), side: const BorderSide()),
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
         child: InkWell(
           onTap: () {
             showTaskDetailDialog(context, widget.taskModel);
           },
           child: Container(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(12),
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   widget.taskModel.title,
-                  textScaler: const TextScaler.linear(1.2),
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 Text(
                   widget.taskModel.description,
-                  maxLines: 2,
+                  maxLines: 3,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (widget.taskModel.getExistingDuration != Duration.zero) ...[
@@ -123,11 +129,9 @@ class _HistoryTaskCardState extends State<HistoryTaskCard> {
                     ),
                     const SizedBox(width: 5),
                     Container(
-                      constraints: BoxConstraints(
-                        maxWidth: thisScreenWidth * 0.2,
-                      ),
+                      width: thisScreenWidth * 0.2,
                       decoration: BoxDecoration(
-                        color: Colors.pink,
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: const EdgeInsets.symmetric(
