@@ -5,6 +5,7 @@ import 'package:kanban_board/cubits/board_task/cubit.dart';
 import 'package:kanban_board/models/board_model.dart';
 
 import '../widgets/confirmation_dialog.dart';
+import 'analytics.dart';
 import 'board_utils.dart';
 
 /// should Return
@@ -27,6 +28,7 @@ Future<bool> addDefaultBoards() async {
               generalContext
                   .read<BoardTaskCubit>()
                   .addMultipleBoards(boardList);
+              logAnalyticEvent(AnalyticEvent.defaultBoard);
             },
           );
         }).then(

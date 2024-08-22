@@ -1,28 +1,59 @@
 # Kanban Board
 
- 
+A powerful and intuitive task management application built with Flutter. Kanban Board helps you create, organize, and manage your tasks with ease, providing a seamless workflow for individuals and teams alike.
 
-// Helping:  context.read<BoardTaskCubit>().boardController;
+## Features
 
-// TODO: allow task editing (title, description)
+- **Create Boards and Tasks**  
+  Organize your tasks into different boards, each representing a different project or phase.
 
-// TODO: use workmanager and scheduel notification if any task is pending
+- **Move Tasks Between Boards**  
+  Easily drag and drop tasks between boards to keep your workflow flexible.
 
-// TODO: firebase analytics
+- **Task History**  
+  Keep track of all your completed tasks with a detailed history. Search and filter through past tasks to find what you need quickly.
 
-lias androiddebugkey -storepass android -keypass android
-Alias name: androiddebugkey
-Creation date: 28-Jun-2023
-Entry type: PrivateKeyEntry
-Certificate chain length: 1
-Certificate[1]:
-Owner: C=US, O=Android, CN=Android Debug
-Issuer: C=US, O=Android, CN=Android Debug
-Serial number: 1
-Valid from: Wed Jun 28 18:07:02 PKT 2023 until: Fri Jun 20 18:07:02 PKT 2053
-Certificate fingerprints:
-         SHA1: 94:FF:4A:B3:4C:5D:73:7C:25:99:68:E5:99:32:14:B9:EA:28:FE:90
-         SHA256: 6A:3B:7D:7D:0A:80:FE:45:F5:63:1E:F9:5D:AC:D9:7E:78:96:6E:EC:7F:B3:0A:CE:E8:8A:44:A7:3C:60:22:6B
-Signature algorithm name: SHA1withRSA (weak)
-Subject Public Key Algorithm: 2048-bit RSA key
-Version: 1
+- **Time Span Tracking**  
+  Track how much time you spend on each task by adding start and end times. The app shows all time spans in which you work in chunks, helping you analyze your productivity.
+
+- **Comments on Tasks**  
+  Add comments to tasks to keep all related information in one place and collaborate with your team effectively.
+
+## Additional Features
+
+- **Reminders**  
+  Set reminders for tasks to ensure nothing slips through the cracks.
+
+- **Themes**  
+  Choose from different themes to personalize your app experience.
+
+- **Language Selection**  
+  Switch between English and French, making the app accessible to a broader audience.
+
+- **Google Drive Backup**  
+  Securely back up your tasks and boards to Google Drive.
+
+- **Analytics (Firebase)**  
+  Gain insights into your app's usage with Firebase Analytics integration.
+
+## Screenshots
+
+![Kanban Board Screenshot 1](#)  
+*Caption: Board view with multiple tasks*
+
+![Kanban Board Screenshot 2](#)  
+*Caption: Task detail view with comments and time tracking*
+
+## Demo Video
+
+Check out this [demo video](#) to see Kanban Board in action!
+
+## Getting Started
+
+To get started with Kanban Board, clone the repository and follow the setup instructions below:
+
+```bash
+git clone https://github.com/yourusername/kanban-board.git
+cd kanban-board
+flutter pub get
+flutter run

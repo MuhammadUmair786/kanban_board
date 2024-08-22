@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/history_task_card.dart';
 import '../constants/extras.dart';
 import '../cubits/history/cubit.dart';
+import '../utils/analytics.dart';
 import '../utils/board_utils.dart';
 import '../widgets/app_bar.dart';
 
@@ -90,6 +91,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                                     searchText: searchController.text.trim(),
                                     filterdBoardId: value,
                                   );
+                              logAnalyticEvent(AnalyticEvent.historyFilter);
                               innerState(() {
                                 filterdBoard = value;
                               });
@@ -138,20 +140,22 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                     ],
                   ),
                 ),
-                SingleChildScrollView(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...task.filteredTasks.map(
-                        (taskModel) {
-                          return HistoryTaskCard(
-                            key: ValueKey(taskModel.id),
-                            taskModel: taskModel,
-                          );
-                        },
-                      )
-                    ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...task.filteredTasks.map(
+                          (taskModel) {
+                            return HistoryTaskCard(
+                              key: ValueKey(taskModel.id),
+                              taskModel: taskModel,
+                            );
+                          },
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],

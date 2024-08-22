@@ -11,6 +11,7 @@ import '../cubits/board_task/cubit.dart';
 import '../models/task_model.dart';
 import '../helpers/time_based_id.dart';
 import '../widgets/confirmation_dialog.dart';
+import 'analytics.dart';
 
 String taskContainerKey = 'TaskContainer';
 
@@ -45,6 +46,7 @@ Future<TaskModel> addTask(String boardId, String title, String description,
       description: description,
       selectedDateTime: reminderDate,
     );
+    logAnalyticEvent(AnalyticEvent.reminder);
   }
 
   return tempTask;

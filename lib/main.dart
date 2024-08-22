@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -6,10 +7,12 @@ import 'package:kanban_board/cubits/history/cubit.dart';
 import 'package:kanban_board/routes/names.dart';
 import 'package:kanban_board/utils/notification_utils.dart';
 import 'package:localization/localization.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'cubits/board_task/cubit.dart';
 import 'constants/theme.dart';
 import 'cubits/theme/cubit.dart';
+import 'firebase_options.dart';
 import 'localization/localization.dart';
 import 'routes/route_list.dart';
 import 'utils/local_storage_utils.dart';
@@ -20,10 +23,18 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
 
-  await Future.wait([
-    NotificationService().initNotification(),
-    initilizeGetStorageContainer(),
-  ]);
+  await Future.wait(
+    [
+      NotificationService().initNotification(),
+      initilizeGetStorageContainer(),
+      Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      ),
+    ],
+  );
+
+  FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
+
   runApp(const MyApp());
 }
 
