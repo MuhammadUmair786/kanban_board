@@ -165,7 +165,7 @@ class _LocaleSettingWidgetState extends State<LocaleSettingWidget> {
       ),
       margin: const EdgeInsets.only(bottom: 5),
       child: Material(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: ListTile(
           // contentPadding: EdgeInsets.zero,
           leading: Container(

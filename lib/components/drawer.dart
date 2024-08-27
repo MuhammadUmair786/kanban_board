@@ -8,6 +8,7 @@ import 'package:kanban_board/widgets/fitted_text_widget.dart';
 import 'package:kanban_board/widgets/snakbar.dart';
 import 'package:localization/localization.dart';
 
+import '../constants/assets.dart';
 import '../views/scheduled_reminder_screen.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -21,16 +22,27 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         children: [
           Container(
             height: 150,
+            width: double.infinity,
             color: Theme.of(context).colorScheme.primary,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: const FittedText(
-              "Kanban Board",
-              boxFit: BoxFit.fitWidth,
-              style: TextStyle(color: Colors.white),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: Column(
+              children: [
+                Expanded(child: Image.asset(logoTransparentPath)),
+                const SizedBox(height: 5),
+                const FittedText(
+                  "Kanban Board",
+                  boxFit: BoxFit.fitWidth,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
           DrawerItemWidget(
@@ -97,11 +109,14 @@ class DrawerItemWidget extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(),
+          bottom: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
         ),
       ),
       child: Material(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
           visualDensity: const VisualDensity(vertical: 2),

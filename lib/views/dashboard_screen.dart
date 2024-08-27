@@ -10,6 +10,7 @@ import '../cubits/board_task/cubit.dart';
 import '../localization/local_keys.dart';
 import '../models/task_model.dart';
 import '../utils/board_utils.dart';
+import '../utils/custom_utils.dart';
 import '../utils/default_boards_utils.dart';
 import '../widgets/confirmation_dialog.dart';
 import '../widgets/snakbar.dart';
@@ -34,6 +35,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     double boardWidth =
         thisScreenWidth > 700 ? thisScreenWidth * 0.3 : thisScreenWidth * 0.75;
 
+    getSavedTheme();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -45,6 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: () {
               showHistoryDialog(context);
             },
+            tooltip: historyLK.i18n(),
             icon: const Icon(Icons.history_sharp),
           ),
         ],

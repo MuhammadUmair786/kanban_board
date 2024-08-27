@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kanban_board/constants/theme.dart';
@@ -16,10 +18,14 @@ ThemeData getSavedTheme() {
   try {
     String themeName = GetStorage().read(selectedThemeKey);
 
+    log(themeName);
+
     String? key =
         availbleThemes.keys.firstWhere((element) => element == themeName);
     return availbleThemes[key]!;
-  } catch (_) {
+  } catch (e, x) {
+    log(e.toString());
+    log(x.toString());
     return availbleThemes.values.first;
   }
 }

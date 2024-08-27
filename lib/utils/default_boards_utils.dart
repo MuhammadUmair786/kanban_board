@@ -16,21 +16,27 @@ Future<bool> addDefaultBoards() async {
         description: "Do you want to add default boards to start quickly",
         onYes: () async {
           Navigator.of(generalContext).pop(true); // close dialogs
-          List<Future<BoardModel>> futureList =
-              ["ToDo", "In Progress", "Completed"]
-                  .map(
-                    (e) => addBoard(e),
-                  )
-                  .toList();
+          List<BoardModel> newBoardList = [];
 
-          await Future.wait(futureList).then(
-            (boardList) {
-              generalContext
-                  .read<BoardTaskCubit>()
-                  .addMultipleBoards(boardList);
-              logAnalyticEvent(AnalyticEvent.defaultBoard);
+          // must follow this order so that we can sort according to date
+          await addBoard("ToDo").then(
+            (value) {
+              newBoardList.add(value);
             },
           );
+          await addBoard("In Progress").then(
+            (value) {
+              newBoardList.add(value);
+            },
+          );
+          await addBoard("Completed").then(
+            (value) {
+              newBoardList.add(value);
+            },
+          );
+
+          generalContext.read<BoardTaskCubit>().addMultipleBoards(newBoardList);
+          logAnalyticEvent(AnalyticEvent.defaultBoard);
         }).then(
       (value) {
         return value ?? false;

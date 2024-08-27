@@ -1,31 +1,34 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:kanban_board/constants/extras.dart';
-import 'package:kanban_board/cubits/history/cubit.dart';
-import 'package:kanban_board/routes/names.dart';
-import 'package:kanban_board/utils/notification_utils.dart';
+
 import 'package:localization/localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
+import 'constants/extras.dart';
 import 'cubits/board_task/cubit.dart';
-import 'constants/theme.dart';
+import 'cubits/history/cubit.dart';
 import 'cubits/theme/cubit.dart';
 import 'firebase_options.dart';
 import 'localization/localization.dart';
+import 'routes/names.dart';
 import 'routes/route_list.dart';
 import 'utils/local_storage_utils.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
+import 'utils/notification_utils.dart';
+
 Future<void> main() async {
-  // final WidgetsBinding widgetsBinding =
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
 
   await Future.wait(
     [
-      NotificationService().initNotification(),
+      if (kIsWeb) ...[
+        NotificationService().initNotification(),
+      ],
       initilizeGetStorageContainer(),
       Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -64,7 +67,6 @@ class MyApp extends StatelessWidget {
             title: 'Kanban Board',
             navigatorKey: navigatorKey,
             theme: state.themeData,
-            darkTheme: vibrantOrangeTheme,
             supportedLocales: supportedLocales,
             locale: state.locale,
             localizationsDelegates: [

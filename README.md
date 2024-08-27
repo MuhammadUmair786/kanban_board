@@ -2,6 +2,9 @@
 
 A powerful and intuitive task management application built with Flutter. Kanban Board helps you create, organize, and manage your tasks with ease, providing a seamless workflow for individuals and teams alike.
 
+This is the web version of Kanban Board: [Kanban Board Web Version](https://kanban-44dfc.web.app/) 
+
+
 ## Features
 
 - **Create Boards and Tasks**  
@@ -28,7 +31,7 @@ A powerful and intuitive task management application built with Flutter. Kanban 
   Choose from different themes to personalize your app experience.
 
 - **Language Selection**  
-  Switch between English and French, making the app accessible to a broader audience.
+  Switch between English, French, German and Arabic making the app accessible to a broader audience.
 
 - **Google Drive Backup**  
   Securely back up your tasks and boards to Google Drive.
@@ -48,23 +51,5 @@ A powerful and intuitive task management application built with Flutter. Kanban 
 
 Check out this [demo video](#) to see Kanban Board in action!
 
-## Getting Started
-
-To get started with Kanban Board, clone the repository and follow the setup instructions below:
-
-```bash
-git clone https://github.com/yourusername/kanban-board.git
-cd kanban-board
-flutter pub get
-flutter run
-
-
-
-// make border around clickable icons -> filled-border color should have 50% opactity
-
-
-coment box:
-
-make diverd lighetr - diveeder have padding around
-make delet button to top-right
-remove border
+ 
+ 

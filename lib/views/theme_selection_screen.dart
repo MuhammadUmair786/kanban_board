@@ -124,7 +124,7 @@ class _ThemeWidgetState extends State<ThemeWidget> {
                     ],
                   ),
                 ),
-                SizedBox(width: double.infinity, child: desiredWidget),
+                Flexible(child: desiredWidget),
               ],
             ),
           ),

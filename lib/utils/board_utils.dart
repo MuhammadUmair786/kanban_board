@@ -12,6 +12,7 @@ Future<BoardModel> addBoard(String name) async {
   BoardModel tempBoard = BoardModel(
     id: id,
     name: name,
+    createdAt: DateTime.now(),
   );
   await GetStorage(boardContainerKey).write(id, tempBoard.toJson());
 
@@ -33,7 +34,8 @@ BoardModel getBoardById(String id) {
   } catch (_) {
     // log(e.toString());
     // log(x.toString());
-    return BoardModel(id: getTimeBasedId(), name: 'Unknown');
+    return BoardModel(
+        id: getTimeBasedId(), name: 'Unknown', createdAt: DateTime(100));
   }
 }
 
@@ -55,7 +57,8 @@ Future<void> removeBoard(BoardModel board) async {
 }
 
 Future<BoardModel> updateBoard(BoardModel board, String updatedName) async {
-  BoardModel tempBoard = BoardModel(id: board.id, name: updatedName);
+  BoardModel tempBoard =
+      BoardModel(id: board.id, name: updatedName, createdAt: board.createdAt);
   await GetStorage(boardContainerKey).write(board.id, tempBoard.toJson());
   return tempBoard;
 }
