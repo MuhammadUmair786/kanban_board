@@ -19,11 +19,15 @@ Future<dynamic> showConfirmationDialog({
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).colorScheme.secondary,
+            color: Colors.white,
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary,
+              width: 3,
+            ),
           ),
           margin: const EdgeInsets.all(20),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -48,25 +52,29 @@ Future<dynamic> showConfirmationDialog({
                 Text(
                   title,
                   style: Theme.of(context).textTheme.headlineMedium,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     description,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontSize: 17,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       decoration: TextDecoration.none,
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                CustomElevatedButton(
+                CustomOutlineButton(
                   label: 'Yes',
-                  width: 100,
-                  height: 30,
+                  width: 120,
+                  height: 25,
+                  borderColor: Theme.of(context).colorScheme.primary,
                   onPressed: onYes,
                 ),
               ],

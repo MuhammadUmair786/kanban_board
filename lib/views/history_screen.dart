@@ -49,7 +49,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
       create: (context) => HistoryCubit(),
       child: BlocBuilder<HistoryCubit, HistoryState>(
         builder: (context, task) {
-          if (task is HistoryInitial || task is HistoryLoading) {
+          if (task is HistoryLoading) {
             return const Center(
               child: CircularProgressIndicator.adaptive(),
             );
@@ -60,9 +60,9 @@ class _HistoryWidgetState extends State<HistoryWidget> {
           } else if (task is HistoryLoaded) {
             return Column(
               children: [
-                const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -81,86 +81,93 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      StatefulBuilder(builder: (context, innerState) {
-                        return PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == filterdBoard) {
-                              context.read<HistoryCubit>().searchAndFilterTasks(
-                                    searchText: searchController.text.trim(),
-                                    filterdBoardId: null,
-                                  );
-                              innerState(() {
-                                filterdBoard = null;
-                              });
-                            } else {
-                              context.read<HistoryCubit>().searchAndFilterTasks(
-                                    searchText: searchController.text.trim(),
-                                    filterdBoardId: value,
-                                  );
-                              logAnalyticEvent(AnalyticEvent.historyFilter);
-                              innerState(() {
-                                filterdBoard = value;
-                              });
-                            }
-                          },
-                          color: Theme.of(context).colorScheme.primary,
-                          elevation: 8,
-                          itemBuilder: (context) {
-                            return getBoards().map(
-                              (e) {
-                                return PopupMenuItem(
-                                  value: e.id,
-                                  height: 30,
-                                  child: Text(
-                                    e.name,
-                                    style: TextStyle(
-                                      decoration: e.id == filterdBoard
-                                          ? TextDecoration.underline
-                                          : TextDecoration.none,
-                                      fontStyle: e.id == filterdBoard
-                                          ? FontStyle.italic
-                                          : null,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList();
-                          },
-                          child: Material(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.5),
+                      StatefulBuilder(
+                        builder: (context, innerState) {
+                          return PopupMenuButton<String>(
+                            onSelected: (value) {
+                              if (value == filterdBoard) {
+                                context
+                                    .read<HistoryCubit>()
+                                    .searchAndFilterTasks(
+                                      searchText: searchController.text.trim(),
+                                      filterdBoardId: null,
+                                    );
+                                innerState(() {
+                                  filterdBoard = null;
+                                });
+                              } else {
+                                context
+                                    .read<HistoryCubit>()
+                                    .searchAndFilterTasks(
+                                      searchText: searchController.text.trim(),
+                                      filterdBoardId: value,
+                                    );
+                                logAnalyticEvent(AnalyticEvent.historyFilter);
+                                innerState(() {
+                                  filterdBoard = value;
+                                });
+                              }
+                            },
+                            color: Theme.of(context).colorScheme.primary,
                             elevation: 8,
-                            shadowColor: Theme.of(context).colorScheme.primary,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Stack(
-                                children: [
-                                  const Icon(
-                                    Icons.filter_alt_sharp,
-                                    size: 28,
-                                  ),
-                                  if (filterdBoard != null)
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        width: 10,
-                                        height: 10,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
+                            itemBuilder: (context) {
+                              return getBoards().map(
+                                (e) {
+                                  return PopupMenuItem(
+                                    value: e.id,
+                                    height: 30,
+                                    child: Text(
+                                      e.name,
+                                      style: TextStyle(
+                                        decoration: e.id == filterdBoard
+                                            ? TextDecoration.underline
+                                            : TextDecoration.none,
+                                        fontStyle: e.id == filterdBoard
+                                            ? FontStyle.italic
+                                            : null,
                                       ),
                                     ),
-                                ],
+                                  );
+                                },
+                              ).toList();
+                            },
+                            child: Material(
+                              borderRadius: BorderRadius.circular(100),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.5),
+                              elevation: 8,
+                              shadowColor:
+                                  Theme.of(context).colorScheme.primary,
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Stack(
+                                  children: [
+                                    const Icon(
+                                      Icons.filter_alt_sharp,
+                                      size: 28,
+                                    ),
+                                    if (filterdBoard != null)
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: Container(
+                                          width: 10,
+                                          height: 10,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -232,7 +239,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                     ],
                   ),
                 ),
-                SizedBox(width: double.infinity, child: desiredWidget),
+                Flexible(child: desiredWidget),
               ],
             ),
           ),

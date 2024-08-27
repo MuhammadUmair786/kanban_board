@@ -118,7 +118,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
                 handleSubmit();
               },
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             if (!isMobile) actionButtonWidget,
           ],
         ),
@@ -140,7 +140,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
         alignment: Alignment.center,
         child: Container(
           margin: const EdgeInsets.all(20),
-          constraints: const BoxConstraints(maxWidth: dialogMaxWidth),
+          constraints: const BoxConstraints(maxWidth: 400),
           child: Material(
             borderRadius: BorderRadius.circular(borderRadius),
             child: Column(
@@ -170,7 +170,7 @@ class _AddBoardDialogState extends State<AddBoardDialog> {
                     ],
                   ),
                 ),
-                desiredWidget,
+                Flexible(child: desiredWidget),
               ],
             ),
           ),

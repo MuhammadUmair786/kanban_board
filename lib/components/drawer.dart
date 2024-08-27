@@ -1,12 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kanban_board/localization/local_keys.dart';
 import 'package:kanban_board/views/backup_setting_screen.dart';
 import 'package:kanban_board/views/locale_selection_screen.dart';
 import 'package:kanban_board/views/theme_selection_screen.dart';
 import 'package:kanban_board/widgets/fitted_text_widget.dart';
+import 'package:kanban_board/widgets/snakbar.dart';
 import 'package:localization/localization.dart';
 
-import '../views/schedule_reminder_screen.dart';
+import '../views/scheduled_reminder_screen.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
@@ -48,14 +50,22 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           DrawerItemWidget(
             label: cloudBackupLK.i18n(),
             onTap: () {
-              showBackupSettingDialog(context);
+              if (kIsWeb) {
+                showSnackBar(featureNotAvailableWebLK.i18n(), isError: true);
+              } else {
+                showBackupSettingDialog(context);
+              }
             },
             leadingIcon: Icons.backup_outlined,
           ),
           DrawerItemWidget(
             label: upcomingTasksLK.i18n(),
             onTap: () {
-              showScheduleReminderDialog(context);
+              if (kIsWeb) {
+                showSnackBar(featureNotAvailableWebLK.i18n(), isError: true);
+              } else {
+                showScheduledReminderDialog(context);
+              }
             },
             leadingIcon: Icons.notification_add_outlined,
           ),

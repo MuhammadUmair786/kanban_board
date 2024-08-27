@@ -1,21 +1,21 @@
 import 'package:appflowy_board/appflowy_board.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kanban_board/utils/board_utils.dart';
-import 'package:kanban_board/views/add_task_screen.dart';
-import 'package:kanban_board/views/history_screen.dart';
-import 'package:kanban_board/widgets/confirmation_dialog.dart';
-import 'package:kanban_board/widgets/snakbar.dart';
+
 import 'package:localization/localization.dart';
 
 import '../components/drawer.dart';
 import '../components/task_card.dart';
 import '../cubits/board_task/cubit.dart';
-import '../cubits/board_task/state.dart';
 import '../localization/local_keys.dart';
 import '../models/task_model.dart';
+import '../utils/board_utils.dart';
 import '../utils/default_boards_utils.dart';
+import '../widgets/confirmation_dialog.dart';
+import '../widgets/snakbar.dart';
 import 'add_board_screen.dart';
+import 'add_task_screen.dart';
+import 'history_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -30,6 +30,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double thisScreenWidth = MediaQuery.of(context).size.width;
+    double boardWidth =
+        thisScreenWidth > 700 ? thisScreenWidth * 0.3 : thisScreenWidth * 0.75;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -120,7 +124,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 margin: config.groupBodyPadding,
               );
             },
-            groupConstraints: const BoxConstraints.tightFor(width: 280),
+            groupConstraints: BoxConstraints.tightFor(width: boardWidth),
             config: config,
           );
         },

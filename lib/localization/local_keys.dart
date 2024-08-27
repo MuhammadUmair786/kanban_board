@@ -7,6 +7,14 @@ const String deleteBackupLK = 'deleteBackup';
 const String deleteBackupWarningLK = 'deleteBackupWarning';
 const String cloudBackupLK = 'cloudBackup';
 
+const String backupSuccessLK = "backupSuccess";
+const String backupFailureLK = "backupFailure";
+const String authorizationFailureLK = "authorizationFailure";
+const String noBackupFoundLK = "noBackupFound";
+const String importFailureLK = "importFailure";
+const String backupDeletionSuccessLK = "backupDeletionSuccess";
+const String backupDeletionFailureLK = "backupDeletionFailure";
+
 // Theme
 const String appearanceLK = 'appearance';
 
@@ -43,3 +51,10 @@ const String boardUpdatedSuccessfullyLK = 'boardUpdatedSuccessfully';
 
 const String durationLK = 'duration';
 const String noUpcomingTasksLK = "noUpcomingTasks";
+
+const String featureNotAvailableWebLK = "featureNotAvailableWeb";
+
+const String filterSearchFailureLK = "filterSearchFailure";
+const String somethingWentWrongLK = "somethingWentWrong";
+const String deleteCommentLK = "deleteComment";
+const String alarmScheduledAtLK = "alarmScheduledAt";

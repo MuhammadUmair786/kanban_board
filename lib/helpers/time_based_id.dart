@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+
 String getTimeBasedId() {
-  return DateTime.now().microsecondsSinceEpoch.remainder(1 << 31).toString();
+  int timePart = DateTime.now().microsecondsSinceEpoch;
+  int hashPart = UniqueKey().hashCode;
+  return "${(timePart + hashPart).remainder(1 << 30)}";
 }

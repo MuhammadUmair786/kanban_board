@@ -1,22 +1,15 @@
-import 'package:equatable/equatable.dart';
+part of 'cubit.dart';
 
-abstract class BoardTaskState extends Equatable {
+abstract class BoardTaskState {
   const BoardTaskState();
-
-  @override
-  List<Object?> get props => [];
 }
 
 class BoardTaskLoadInProgress extends BoardTaskState {}
 
-class BoardTaskLoadSuccess extends BoardTaskState {
-  // final List<BoardModel> boardList;
-  // final List<TaskModel> taskList;
+class BoardTaskLoadSuccess extends BoardTaskState {}
 
-  // const BoardTaskLoadSuccess(this.boardList, this.taskList);
+class BoardOperationFailure extends BoardTaskState {
+  final String message;
 
-  // @override
-  // List<Object?> get props => [boardList];
+  const BoardOperationFailure(this.message);
 }
-
-class BoardOperationFailure extends BoardTaskState {}

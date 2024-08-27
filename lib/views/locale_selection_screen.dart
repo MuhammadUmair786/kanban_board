@@ -46,6 +46,7 @@ class _LocaleWidgetState extends State<LocaleWidget> {
 
     Widget desiredWidget = Builder(builder: (context) {
       return SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           children: [
             LocaleSettingWidget(

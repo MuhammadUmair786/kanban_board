@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:kanban_board/cubits/board_task/cubit.dart';
+import 'package:kanban_board/utils/notification_utils.dart';
 import 'package:localization/localization.dart';
 
 import '../constants/extras.dart';
@@ -105,10 +106,24 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               widget.taskModel!,
               title: titleController.text.trim(),
               description: descriptionController.text.trim(),
+              reminderDate: reminderDate,
             ).then(
-              (value) {
-                Navigator.of(context).pop();
-                context.read<BoardTaskCubit>().updateTask(value);
+              (updatedValue) {
+                Navigator.of(context).maybePop();
+                context.read<BoardTaskCubit>().updateTask(updatedValue);
+
+                if (reminderDate == null) {
+                  NotificationService.cancelNotificationIfAlreadyExist(
+                    int.parse(updatedValue.id),
+                  );
+                } else if (reminderDate != widget.taskModel?.scheduleAt) {
+                  addReminderOnTask(
+                    int.parse(widget.taskModel!.id),
+                    updatedValue.title,
+                    updatedValue.description,
+                    reminderDate!,
+                  );
+                }
                 showSnackBar(taskUpdatedSuccessfullyLK.i18n());
               },
             );
@@ -233,7 +248,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                     ],
                   ),
                 ),
-                desiredWidget,
+                Flexible(child: desiredWidget),
               ],
             ),
           ),

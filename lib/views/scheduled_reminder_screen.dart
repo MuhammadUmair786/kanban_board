@@ -11,18 +11,18 @@ import '../constants/extras.dart';
 import '../localization/local_keys.dart';
 import '../widgets/app_bar.dart';
 
-void showScheduleReminderDialog(BuildContext context) {
+void showScheduledReminderDialog(BuildContext context) {
   if (isMobile) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const HistoryWidget(),
+        builder: (BuildContext context) => const ScheduledReminderWidget(),
       ),
     );
   } else {
     showGeneralDialog(
       context: context,
       pageBuilder: (context, animation, secondaryAnimation) {
-        return const HistoryWidget();
+        return const ScheduledReminderWidget();
       },
       barrierLabel: 'showScheduleReminderDialog',
       barrierDismissible: true,
@@ -30,16 +30,17 @@ void showScheduleReminderDialog(BuildContext context) {
   }
 }
 
-class HistoryWidget extends StatefulWidget {
-  const HistoryWidget({
+class ScheduledReminderWidget extends StatefulWidget {
+  const ScheduledReminderWidget({
     super.key,
   });
 
   @override
-  State<HistoryWidget> createState() => _HistoryWidgetState();
+  State<ScheduledReminderWidget> createState() =>
+      _ScheduledReminderWidgetState();
 }
 
-class _HistoryWidgetState extends State<HistoryWidget> {
+class _ScheduledReminderWidgetState extends State<ScheduledReminderWidget> {
   TextEditingController searchController = TextEditingController();
   String? filterdBoard;
   @override
@@ -165,7 +166,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                     ],
                   ),
                 ),
-                SizedBox(width: double.infinity, child: desiredWidget),
+                Flexible(child: desiredWidget),
               ],
             ),
           ),

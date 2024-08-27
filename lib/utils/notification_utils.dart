@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -30,17 +31,6 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
     );
-
-    // await flutterLocalNotificationsPlugin
-    //     .pendingNotificationRequests()
-    //     .then((pendingNotificationList) {
-    //   PendingNotificationRequest? threePmNotification = pendingNotificationList
-    //       .firstWhereOrNull((element) => element.id == threePmNotificationId);
-
-    //   if (threePmNotification == null) {
-    //     schedule3PmNotification();
-    //   }
-    // });
   }
 
   static NotificationDetails notificationDetails() {
@@ -62,17 +52,9 @@ class NotificationService {
   }
 
   static tz.TZDateTime getNotificationTime(DateTime selectedDateTime) {
-    // Convert the local DateTime to UTC
-    final utcDateTime = selectedDateTime.toUtc();
-
-    // Convert UTC DateTime to TZDateTime with local time zone
     final tz.TZDateTime tzSelectedDateTime =
-        tz.TZDateTime.from(utcDateTime, tz.local);
-
-    // Get the current time in the local time zone
+        tz.TZDateTime.from(selectedDateTime.toUtc(), tz.local);
     final now = tz.TZDateTime.now(tz.local);
-
-    // Ensure the selected time is not before the current time
     if (tzSelectedDateTime.isBefore(now)) {
       throw Exception("Selected time is before the current time");
     }
@@ -80,29 +62,16 @@ class NotificationService {
     return tzSelectedDateTime;
   }
 
-  // static tz.TZDateTime getNotificationTime(DateTime selectedDateTime) {
-  //   final tz.TZDateTime tzSelectedDateTime = tz.TZDateTime(
-  //     tz.local,
-  //     selectedDateTime.year,
-  //     selectedDateTime.month,
-  //     selectedDateTime.day,
-  //     selectedDateTime.hour,
-  //     selectedDateTime.minute,
-  //     selectedDateTime.second,
-  //   );
-
-  //   log("selected      =  ${selectedDateTime.toIso8601String()}");
-  //   log("tz.TZDateTime =  ${tzSelectedDateTime.toIso8601String()}");
-
-  //   final now = tz.TZDateTime.now(tz.local);
-
-  //   // Ensure the selected time is not before the current time
-  //   if (tzSelectedDateTime.isBefore(now)) {
-  //     throw Exception("Selected time is before the current time");
-  //   }
-
-  //   return tzSelectedDateTime;
-  // }
+  static Future<void> cancelNotificationIfAlreadyExist(
+      int notificationId) async {
+    await flutterLocalNotificationsPlugin.pendingNotificationRequests().then(
+      (list) async {
+        if (list.any((element) => element.id == notificationId)) {
+          await flutterLocalNotificationsPlugin.cancel(notificationId);
+        }
+      },
+    );
+  }
 
   static Future scheduleTaskNotification({
     required int id,
@@ -110,6 +79,11 @@ class NotificationService {
     required String description,
     required DateTime selectedDateTime,
   }) async {
+    if (kIsWeb) {
+      return;
+    }
+
+    await cancelNotificationIfAlreadyExist(id);
     final PermissionStatus status = await Permission.notification.status;
 
     if (status.isDenied) {
@@ -154,5 +128,3 @@ class NotificationService {
     );
   }
 }
-
-void checkForAnyPendingNotification() {}

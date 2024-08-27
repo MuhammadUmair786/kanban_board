@@ -56,16 +56,16 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
           )
               .then((_) async {
             dismissLoadingWidget();
-            showSnackBar('Data back up sucessfully');
+            showSnackBar(backupSuccessLK.i18n());
           }).onError((e, x) {
             log(e.toString());
             log(x.toString());
 
-            showSnackBar('Fail to backup data');
+            showSnackBar(backupFailureLK.i18n(), isError: true);
           });
         } else {
           dismissLoadingWidget();
-          showSnackBar('Unathorize');
+          showSnackBar(authorizationFailureLK.i18n(), isError: true);
         }
       },
     );
@@ -81,23 +81,25 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
               .then((String? importedDataString) async {
             dismissLoadingWidget();
             if (importedDataString == null || importedDataString.isEmpty) {
-              showSnackBar('No backup found');
+              showSnackBar(noBackupFoundLK.i18n(), isError: true);
             } else {
               Map<String, dynamic> importedJsonData =
                   jsonDecode(importedDataString);
-              await initilizeDataFromBackupJSON(importedJsonData);
+              await initilizeDataFromBackupJSON(importedJsonData).then(
+                (value) {
+                  Navigator.of(context).maybePop();
+                },
+              );
             }
           }).onError((e, x) {
             dismissLoadingWidget();
             log(e.toString());
             log(x.toString());
-            showSnackBar(
-              'Fail to import data',
-            );
+            showSnackBar(importFailureLK.i18n(), isError: true);
           });
         } else {
           dismissLoadingWidget();
-          showSnackBar('Unathorize');
+          showSnackBar(authorizationFailureLK.i18n(), isError: true);
         }
       },
     );
@@ -111,15 +113,15 @@ class _BackupSettingWidgetState extends State<BackupSettingWidget> {
           (isDelete) {
             dismissLoadingWidget();
             if (isDelete) {
-              showSnackBar('Back up deleted sucessfuly');
+              showSnackBar(backupDeletionSuccessLK.i18n());
             } else {
-              showSnackBar('Fail to delete back up', isError: true);
+              showSnackBar(backupDeletionFailureLK.i18n(), isError: true);
             }
           },
         );
       } else {
         dismissLoadingWidget();
-        showSnackBar('Unathorize');
+        showSnackBar(authorizationFailureLK.i18n(), isError: true);
       }
     });
   }

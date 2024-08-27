@@ -1,18 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kanban_board/constants/extras.dart';
-import 'package:kanban_board/helpers/time_based_id.dart';
-import 'package:kanban_board/utils/task_utils.dart';
 
+import '../constants/extras.dart';
 import '../cubits/board_task/cubit.dart';
+import '../helpers/time_based_id.dart';
 import '../models/task_model.dart';
+import 'task_utils.dart';
 
-Future<TaskModel> addComment(
-    BuildContext context, TaskModel taskModel, String comment) async {
+Future<TaskModel> addCommentToTask(TaskModel taskModel, String comment) async {
   List<CommentModel> latestCommentList = List.from(taskModel.commentList);
   latestCommentList.add(
     CommentModel(id: getTimeBasedId(), comment: comment),
@@ -23,7 +20,8 @@ Future<TaskModel> addComment(
   ).then(
     (value) {
       log(jsonEncode(value.toJson()));
-      context.read<BoardTaskCubit>().updateTask(value);
+      generalContext.read<BoardTaskCubit>().updateTask(value);
+
       return value;
     },
   );
@@ -51,7 +49,7 @@ Future<TaskModel> addComment(
 //   }
 // }
 
-Future<TaskModel> deleteComment(TaskModel taskModel, String commentId) {
+Future<TaskModel> deleteCommentFromTask(TaskModel taskModel, String commentId) {
   List<CommentModel> latestCommentList = List.from(taskModel.commentList);
 
   int index =

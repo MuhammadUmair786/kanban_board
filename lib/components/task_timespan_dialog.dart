@@ -19,7 +19,11 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).colorScheme.secondary,
+            color: Colors.white,
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary,
+              width: 3,
+            ),
           ),
           margin: const EdgeInsets.all(20),
           child: DefaultTextStyle(
@@ -32,7 +36,7 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
               children: [
                 Flexible(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

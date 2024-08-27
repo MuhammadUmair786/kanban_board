@@ -17,7 +17,7 @@ Map<String, String> get apiHeader => {
 
 bool get isMobile => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
-const double dialogMaxWidth = 700;
+const double dialogMaxWidth = 600;
 
 final navigatorKey = GlobalKey<NavigatorState>();
 

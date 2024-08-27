@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
             title: 'Kanban Board',
             navigatorKey: navigatorKey,
             theme: state.themeData,
-            darkTheme: darkMinimalistTheme,
+            darkTheme: vibrantOrangeTheme,
             supportedLocales: supportedLocales,
             locale: state.locale,
             localizationsDelegates: [

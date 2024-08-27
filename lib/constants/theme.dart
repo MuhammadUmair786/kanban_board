@@ -9,21 +9,14 @@ enum ThemeName { blue, green, dark, pink, orange }
 Map<String, ThemeData> availbleThemes = {
   "Classic Blue Theme": classicBlueTheme,
   "Modern Green Theme": modernGreenTheme,
-  "Dark Minimalist Theme": darkMinimalistTheme,
   "Playful Pink Theme": playfulPinkTheme,
   "vibrant Orange Theme": vibrantOrangeTheme,
 };
-
-// String getThemName(String tempName){
-//   if(tempName)
-
-// }
 
 // Classic Blue Theme
 final ThemeData classicBlueTheme = ThemeData(
   colorScheme: const ColorScheme.light(
     primary: Colors.blue, // Base color
-
     secondary: Color(0xFF64B5F6), // Lighter shade of blue for accents
     onPrimary: Colors.white, // Text color on primary color
     onSecondary: Colors.black, // Light blue background
@@ -97,24 +90,21 @@ final ThemeData modernGreenTheme = ThemeData(
     brightness: Brightness.light,
   ),
 
-  textTheme: const TextTheme(
-    displayLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge * 2.0),
-    displayMedium:
-        TextStyle(color: Colors.black, fontSize: fontSizeLarge * 1.5),
-    displaySmall: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    headlineLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    headlineMedium:
-        TextStyle(color: Colors.black, fontSize: fontSizeMedium * 1.5),
-    headlineSmall: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    titleLarge: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    titleMedium: TextStyle(color: Colors.black, fontSize: fontSizeSmall * 1.2),
-    titleSmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    bodyLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    bodyMedium: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    bodySmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    labelLarge: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    labelMedium: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    labelSmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall * 0.8),
+  textTheme: TextTheme(
+    titleMedium: const TextStyle(
+      color: Colors.green,
+      fontSize: fontSizeLarge,
+      fontWeight: FontWeight.w700,
+    ),
+    bodyMedium: TextStyle(
+      color: Colors.grey[700],
+      fontSize: fontSizeMedium,
+      fontWeight: FontWeight.w400,
+    ),
+    labelMedium: const TextStyle(
+      color: Colors.black,
+      fontSize: fontSizeSmall,
+    ),
   ),
 
   iconTheme:
@@ -153,74 +143,6 @@ final ThemeData modernGreenTheme = ThemeData(
   ),
 );
 
-// Dark Minimalist Theme
-final ThemeData darkMinimalistTheme = ThemeData(
-  colorScheme: const ColorScheme.dark(
-    primary: Colors.grey, // Base color
-    secondary: Color(0xFF616161), // Lighter shade of grey for accents
-    onPrimary: Colors.white, // Text color on primary color
-    onSecondary: Colors.white, // Dark background color
-    surface: Color(0xFF1E1E1E), // Slightly lighter surface color
-    onSurface: Colors.white, // Text color on surface
-    brightness: Brightness.dark,
-  ),
-
-  textTheme: const TextTheme(
-    displayLarge: TextStyle(color: Colors.white, fontSize: fontSizeLarge * 2.0),
-    displayMedium:
-        TextStyle(color: Colors.white, fontSize: fontSizeLarge * 1.5),
-    displaySmall: TextStyle(color: Colors.white, fontSize: fontSizeLarge),
-    headlineLarge: TextStyle(color: Colors.white, fontSize: fontSizeLarge),
-    headlineMedium:
-        TextStyle(color: Colors.white, fontSize: fontSizeMedium * 1.5),
-    headlineSmall: TextStyle(color: Colors.white, fontSize: fontSizeMedium),
-    titleLarge: TextStyle(color: Colors.white, fontSize: fontSizeMedium),
-    titleMedium: TextStyle(color: Colors.white, fontSize: fontSizeSmall * 1.2),
-    titleSmall: TextStyle(color: Colors.white, fontSize: fontSizeSmall),
-    bodyLarge: TextStyle(color: Colors.white, fontSize: fontSizeLarge),
-    bodyMedium: TextStyle(color: Colors.white, fontSize: fontSizeMedium),
-    bodySmall: TextStyle(color: Colors.white, fontSize: fontSizeSmall),
-    labelLarge: TextStyle(color: Colors.white, fontSize: fontSizeMedium),
-    labelMedium: TextStyle(color: Colors.white, fontSize: fontSizeSmall),
-    labelSmall: TextStyle(color: Colors.white, fontSize: fontSizeSmall * 0.8),
-  ),
-
-  iconTheme:
-      const IconThemeData(color: Color(0xFFB0BEC5)), // Light grey for icons
-  scaffoldBackgroundColor: const Color(0xFF121212), // Dark background color
-  appBarTheme: const AppBarTheme(
-    backgroundColor:
-        Color(0xFF1E1E1E), // Slightly lighter background for AppBar
-    foregroundColor: Colors.white,
-    iconTheme: IconThemeData(color: Colors.white), // White icons in AppBar
-  ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      foregroundColor: Colors.black, // Button text color
-      backgroundColor: Colors.white, // Button background color
-      shadowColor:
-          Colors.grey[800], // Button shadow color (darker shade of grey)
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8), // Rounded corners
-      ),
-    ),
-  ),
-  inputDecorationTheme: const InputDecorationTheme(
-    filled: true,
-    fillColor: Color(0xFF1E1E1E), // Darker background for input fields
-    border: OutlineInputBorder(
-      borderSide:
-          BorderSide(color: Colors.grey), // Grey border for input fields
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide:
-          BorderSide(color: Color(0xFFB0BEC5)), // Light grey when focused
-    ),
-    labelStyle: TextStyle(color: Color(0xFFB0BEC5)), // Light grey for labels
-    hintStyle: TextStyle(color: Colors.grey), // Grey for hints
-  ),
-);
-
 // Playful Pink Theme
 final ThemeData playfulPinkTheme = ThemeData(
   colorScheme: const ColorScheme.light(
@@ -233,24 +155,21 @@ final ThemeData playfulPinkTheme = ThemeData(
     brightness: Brightness.light,
   ),
 
-  textTheme: const TextTheme(
-    displayLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge * 2.0),
-    displayMedium:
-        TextStyle(color: Colors.black, fontSize: fontSizeLarge * 1.5),
-    displaySmall: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    headlineLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    headlineMedium:
-        TextStyle(color: Colors.black, fontSize: fontSizeMedium * 1.5),
-    headlineSmall: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    titleLarge: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    titleMedium: TextStyle(color: Colors.black, fontSize: fontSizeSmall * 1.2),
-    titleSmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    bodyLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    bodyMedium: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    bodySmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    labelLarge: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    labelMedium: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    labelSmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall * 0.8),
+  textTheme: TextTheme(
+    titleMedium: const TextStyle(
+      color: Colors.pink,
+      fontSize: fontSizeLarge,
+      fontWeight: FontWeight.w700,
+    ),
+    bodyMedium: TextStyle(
+      color: Colors.grey[700],
+      fontSize: fontSizeMedium,
+      fontWeight: FontWeight.w400,
+    ),
+    labelMedium: const TextStyle(
+      color: Colors.black,
+      fontSize: fontSizeSmall,
+    ),
   ),
 
   iconTheme:
@@ -301,24 +220,21 @@ final ThemeData vibrantOrangeTheme = ThemeData(
     brightness: Brightness.light,
   ),
 
-  textTheme: const TextTheme(
-    displayLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge * 2.0),
-    displayMedium:
-        TextStyle(color: Colors.black, fontSize: fontSizeLarge * 1.5),
-    displaySmall: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    headlineLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    headlineMedium:
-        TextStyle(color: Colors.black, fontSize: fontSizeMedium * 1.5),
-    headlineSmall: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    titleLarge: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    titleMedium: TextStyle(color: Colors.black, fontSize: fontSizeSmall * 1.2),
-    titleSmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    bodyLarge: TextStyle(color: Colors.black, fontSize: fontSizeLarge),
-    bodyMedium: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    bodySmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    labelLarge: TextStyle(color: Colors.black, fontSize: fontSizeMedium),
-    labelMedium: TextStyle(color: Colors.black, fontSize: fontSizeSmall),
-    labelSmall: TextStyle(color: Colors.black, fontSize: fontSizeSmall * 0.8),
+  textTheme: TextTheme(
+    titleMedium: const TextStyle(
+      color: Colors.orange,
+      fontSize: fontSizeLarge,
+      fontWeight: FontWeight.w700,
+    ),
+    bodyMedium: TextStyle(
+      color: Colors.grey[700],
+      fontSize: fontSizeMedium,
+      fontWeight: FontWeight.w400,
+    ),
+    labelMedium: const TextStyle(
+      color: Colors.black,
+      fontSize: fontSizeSmall,
+    ),
   ),
 
   iconTheme:

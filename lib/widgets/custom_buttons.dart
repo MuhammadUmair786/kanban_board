@@ -78,6 +78,7 @@ class CustomOutlineButton extends StatelessWidget {
         fixedSize: Size(width, height),
         side: BorderSide(
           color: borderColor ?? const Color(0xFF000000),
+          width: 1.5,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
@@ -89,7 +90,7 @@ class CustomOutlineButton extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 label,
-                style: TextStyle(color: borderColor),
+                style: TextStyle(color: borderColor, fontSize: 16),
               ),
             )
           : Row(

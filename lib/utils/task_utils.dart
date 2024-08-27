@@ -3,17 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:kanban_board/constants/extras.dart';
-import 'package:kanban_board/cubits/history/cubit.dart';
-import 'package:kanban_board/utils/notification_utils.dart';
+
 import 'package:localization/localization.dart';
 
+import '../constants/extras.dart';
 import '../cubits/board_task/cubit.dart';
+import '../cubits/history/cubit.dart';
 import '../localization/local_keys.dart';
 import '../models/task_model.dart';
 import '../helpers/time_based_id.dart';
 import '../widgets/confirmation_dialog.dart';
 import 'analytics.dart';
+import 'notification_utils.dart';
 
 String taskContainerKey = 'TaskContainer';
 
@@ -42,16 +43,21 @@ Future<TaskModel> addTask(String boardId, String title, String description,
   await GetStorage(taskContainerKey).write(id, tempTask.toJson());
 
   if (reminderDate != null) {
-    NotificationService.scheduleTaskNotification(
-      id: int.parse(id),
-      title: title,
-      description: description,
-      selectedDateTime: reminderDate,
-    );
-    logAnalyticEvent(AnalyticEvent.reminder);
+    addReminderOnTask(int.parse(id), title, description, reminderDate);
   }
 
   return tempTask;
+}
+
+void addReminderOnTask(
+    int id, String title, String description, DateTime reminderDate) {
+  NotificationService.scheduleTaskNotification(
+    id: id,
+    title: title,
+    description: description,
+    selectedDateTime: reminderDate,
+  );
+  logAnalyticEvent(AnalyticEvent.reminder);
 }
 
 Future<void> addTasksInBulk(List<dynamic> jsonList) async {
@@ -160,8 +166,12 @@ Future<TaskModel> updateTask(
 }
 
 Future<TaskModel> handleUpdatingOfTaskInLocalStorage(TaskModel task) async {
-  await GetStorage(taskContainerKey).write(task.id, task.toJson());
-  return task;
+  return GetStorage(taskContainerKey).write(task.id, task.toJson()).then(
+    (value) {
+      generalContext.read<BoardTaskCubit>().updateTask(task);
+      return task;
+    },
+  );
 }
 
 /// [taskList] -> List of task in that group

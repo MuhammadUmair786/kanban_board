@@ -1,12 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:localization/localization.dart';
 
+import '../../localization/local_keys.dart';
 import '../../models/task_model.dart';
 import '../../utils/task_utils.dart';
 
 part 'state.dart';
 
 class HistoryCubit extends Cubit<HistoryState> {
-  HistoryCubit() : super(HistoryInitial()) {
+  HistoryCubit() : super(HistoryLoading()) {
     loadTasks();
   }
 
@@ -16,7 +18,7 @@ class HistoryCubit extends Cubit<HistoryState> {
       List<TaskModel> allTasks = getTasks();
       emit(HistoryLoaded(allTasks));
     } catch (e) {
-      emit(HistoryError('Failed to load tasks from local storage'));
+      emit(HistoryError(somethingWentWrongLK.i18n()));
     }
   }
 
@@ -39,10 +41,9 @@ class HistoryCubit extends Cubit<HistoryState> {
             )
             .toList();
       }
-
       emit(HistoryLoaded(filteredTasks));
     } catch (e) {
-      emit(HistoryError('Failed to filter and search tasks'));
+      emit(HistoryError(filterSearchFailureLK.i18n()));
     }
   }
 }

@@ -2,12 +2,15 @@ import 'dart:developer';
 
 import 'package:appflowy_board/appflowy_board.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kanban_board/localization/local_keys.dart';
+import 'package:localization/localization.dart';
 
 import '../../models/board_model.dart';
 import '../../models/task_model.dart';
 import '../../utils/board_utils.dart';
 import '../../utils/task_utils.dart';
-import 'state.dart';
+
+part 'state.dart';
 
 class BoardTaskCubit extends Cubit<BoardTaskState> {
   late final AppFlowyBoardController boardController;
@@ -79,7 +82,7 @@ class BoardTaskCubit extends Cubit<BoardTaskState> {
       }
       emit(BoardTaskLoadSuccess());
     } catch (_) {
-      emit(BoardOperationFailure());
+      emit(BoardOperationFailure(somethingWentWrongLK.i18n()));
     }
   }
 
