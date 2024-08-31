@@ -76,6 +76,7 @@ class TaskDetailWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         taskModel.title,
@@ -402,7 +403,8 @@ class TaskDetailWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(width: double.infinity, child: desiredWidget),
+                      Flexible(child: desiredWidget),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
