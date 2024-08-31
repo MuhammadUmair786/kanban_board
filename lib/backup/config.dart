@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants/extras.dart';
@@ -26,7 +24,6 @@ Map<String, dynamic> getLocalDataConvertedIntoBackUpStandard() {
 }
 
 Future<void> initilizeDataFromBackupJSON(Map<String, dynamic> json) async {
-  log(json[updatedAtKey]);
   List<Future<dynamic>> futureList = <Future<dynamic>>[];
   if (json[updatedAtKey] != null) {
     DateTime? dateTime = DateTime.tryParse(json[updatedAtKey]);

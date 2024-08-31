@@ -39,7 +39,6 @@ class GoogleDriveRepository {
   initGoogleDriveCloud(http.Client newClient) {
     client = newClient;
     cloud = DriveApi(client!);
-    log('cloud : set');
   }
 
   Future<File?> isBackupExist() async {

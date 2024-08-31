@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../helpers/formate_duration.dart';
 import '../../models/task_model.dart';
 import '../../utils/time_span_utils.dart';
+import '../task/cubit.dart';
 
 part 'state.dart';
 
@@ -27,7 +29,7 @@ class TaskTimerCubit extends Cubit<TaskTimerState> {
     );
   }
 
-  Future<void> startTimer() async {
+  Future<void> startTimer(BuildContext context) async {
     if (taskModel.isAnyPendingTimespan) {
       // do nothing
     } else {
@@ -35,16 +37,20 @@ class TaskTimerCubit extends Cubit<TaskTimerState> {
         (value) async {
           updateTaskModel(value);
           manageTimer();
+
+          context.read<TaskCubit>().updateTask(value);
         },
       );
     }
   }
 
-  Future<void> stopTimer() async {
+  Future<void> stopTimer(BuildContext context) async {
     if (taskModel.isAnyPendingTimespan) {
       await endTimeSpan(taskModel).then(
         (value) {
           updateTaskModel(value);
+          context.read<TaskCubit>().updateTask(value);
+
           try {
             timer?.cancel();
           } catch (_) {}
@@ -81,7 +87,6 @@ class TaskTimerCubit extends Cubit<TaskTimerState> {
           final ongoingDuration =
               DateTime.now().difference(pendingTimeSpan!.startTime);
           final totalDuration = taskModel.getExistingDuration + ongoingDuration;
-
           emit(
             TimerUpdateSuccess(
               formatDuration(totalDuration),

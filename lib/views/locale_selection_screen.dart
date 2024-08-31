@@ -90,6 +90,7 @@ class _LocaleWidgetState extends State<LocaleWidget> {
       return Scaffold(
         appBar: mobileAppbar(title: titleText),
         body: desiredWidget,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       );
     } else {
       return Align(
@@ -99,6 +100,7 @@ class _LocaleWidgetState extends State<LocaleWidget> {
           constraints: const BoxConstraints(maxWidth: dialogMaxWidth),
           child: Material(
             borderRadius: BorderRadius.circular(borderRadius),
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -164,55 +166,51 @@ class _LocaleSettingWidgetState extends State<LocaleSettingWidget> {
         ),
       ),
       margin: const EdgeInsets.only(bottom: 5),
-      child: Material(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        child: ListTile(
-          // contentPadding: EdgeInsets.zero,
-          leading: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: isCurrent
-                      ? Theme.of(context).colorScheme.primary
-                      : const Color(0xFF000000)),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            padding: const EdgeInsets.all(5),
-            child: FittedText(
-              widget.locale.countryCode ?? '--',
-              style: TextStyle(
-                color: isCurrent ? Theme.of(context).colorScheme.primary : null,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+      child: ListTile(
+        leading: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+                color: isCurrent
+                    ? Theme.of(context).colorScheme.primary
+                    : const Color(0xFF000000)),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+          child: FittedText(
+            widget.locale.countryCode ?? '--',
+            style: TextStyle(
+              color: isCurrent ? Theme.of(context).colorScheme.primary : null,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
             ),
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          title: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.topLeft,
-            child: Text(
-              widget.title,
-              style: TextStyle(
-                color: isCurrent ? Theme.of(context).colorScheme.primary : null,
-              ),
-            ),
-          ),
-          trailing: isCurrent
-              ? Icon(
-                  Icons.check_circle,
-                  color: Theme.of(context).colorScheme.primary,
-                )
-              : null,
-          onTap: () {
-            context
-                .read<ThemeLocaleCubit>()
-                .changeLocale(widget.locale.languageCode);
-
-            widget.onChange();
-          },
         ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.topLeft,
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              color: isCurrent ? Theme.of(context).colorScheme.primary : null,
+            ),
+          ),
+        ),
+        trailing: isCurrent
+            ? Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.primary,
+              )
+            : null,
+        onTap: () {
+          context
+              .read<ThemeLocaleCubit>()
+              .changeLocale(widget.locale.languageCode);
+
+          widget.onChange();
+        },
       ),
     );
   }

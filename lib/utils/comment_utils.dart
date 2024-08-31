@@ -12,7 +12,11 @@ import 'task_utils.dart';
 Future<TaskModel> addCommentToTask(TaskModel taskModel, String comment) async {
   List<CommentModel> latestCommentList = List.from(taskModel.commentList);
   latestCommentList.add(
-    CommentModel(id: getTimeBasedId(), comment: comment),
+    CommentModel(
+      id: getTimeBasedId(),
+      comment: comment,
+      createdAt: DateTime.now(),
+    ),
   );
   return updateTask(
     taskModel,

@@ -27,25 +27,21 @@ Future<dynamic> showConfirmationDialog({
           ),
           margin: const EdgeInsets.all(20),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: SizedBox(
-                      width: 25,
-                      height: 25,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(Icons.close),
-                        iconSize: 18,
-                        padding: EdgeInsets.zero,
-                      ),
+                  child: SizedBox(
+                    width: 25,
+                    height: 25,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(Icons.close),
+                      iconSize: 18,
+                      padding: EdgeInsets.zero,
                     ),
                   ),
                 ),
@@ -62,11 +58,12 @@ Future<dynamic> showConfirmationDialog({
                   child: Text(
                     description,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      decoration: TextDecoration.none,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    // style: const TextStyle(
+                    //   fontSize: 15,
+                    //   fontWeight: FontWeight.w600,
+                    //   decoration: TextDecoration.none,
+                    // ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -77,6 +74,7 @@ Future<dynamic> showConfirmationDialog({
                   borderColor: Theme.of(context).colorScheme.primary,
                   onPressed: onYes,
                 ),
+                const SizedBox(height: 10),
               ],
             ),
           ),

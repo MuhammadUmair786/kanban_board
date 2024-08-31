@@ -169,6 +169,8 @@ Future<TaskModel> handleUpdatingOfTaskInLocalStorage(TaskModel task) async {
   return GetStorage(taskContainerKey).write(task.id, task.toJson()).then(
     (value) {
       generalContext.read<BoardTaskCubit>().updateTask(task);
+      //....
+
       return task;
     },
   );

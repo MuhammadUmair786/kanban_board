@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
@@ -165,37 +166,38 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               controller: descriptionController,
               minLines: 5,
               maxlines: 10,
-              textInputAction: TextInputAction.newline,
             ),
-            InkWell(
-              onTap: () async {
-                await getDateTimeInput(DateTime.now(),
-                        DateTime.now().add(const Duration(days: 60)))
-                    .then(
-                  (DateTime? value) {
-                    if (value != null) {
-                      if (value.isBefore(DateTime.now())) {
-                        showSnackBar(
-                            "Reminders cannot be set for past dates. Please select a future date.");
-                      } else {
-                        reminderController.text = getFormatedDate(value);
-                        reminderDate = value;
+            if (!kIsWeb)
+              InkWell(
+                onTap: () async {
+                  FocusScope.of(context).unfocus();
+                  await getDateTimeInput(DateTime.now(),
+                          DateTime.now().add(const Duration(days: 60)))
+                      .then(
+                    (DateTime? value) {
+                      if (value != null) {
+                        if (value.isBefore(DateTime.now())) {
+                          showSnackBar(
+                              "Reminders cannot be set for past dates. Please select a future date.");
+                        } else {
+                          reminderController.text = getFormatedDate(value);
+                          reminderDate = value;
+                        }
                       }
-                    }
-                  },
-                );
-              },
-              child: AbsorbPointer(
-                child: CustomTextFormFieldWithLabel(
-                  labelText: "Alarm Date",
-                  hintText: "Set reminder date",
-                  controller: reminderController,
-                  validator: (_) {
-                    return null;
-                  },
+                    },
+                  );
+                },
+                child: AbsorbPointer(
+                  child: CustomTextFormFieldWithLabel(
+                    labelText: "Alarm Date",
+                    hintText: "Set reminder date",
+                    controller: reminderController,
+                    validator: (_) {
+                      return null;
+                    },
+                  ),
                 ),
               ),
-            ),
             const SizedBox(height: 10),
             if (!isMobile) actionButtonWidget,
           ],

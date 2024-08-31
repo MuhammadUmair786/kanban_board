@@ -57,8 +57,10 @@ class TaskDetailWidget extends StatelessWidget {
       child: Builder(
         builder: (context) {
           String titleText = context.read<TaskCubit>().taskModel.title;
+
           TaskCubit taskCubit = context.read<TaskCubit>();
           TaskTimerCubit timerCubit = context.read<TaskTimerCubit>();
+
           Widget desiredWidget = BlocConsumer<TaskCubit, TaskState>(
             listener: (context, state) {
               if (state is TaskUpdate) {
@@ -136,48 +138,50 @@ class TaskDetailWidget extends StatelessWidget {
                         ),
                       ],
                       BlocBuilder<TaskTimerCubit, TaskTimerState>(
-                          builder: (context, timerState) {
-                        String durationString = timerState is TimerLoadSuccess
-                            ? timerState.durationString
-                            : (timerState as TimerUpdateSuccess).durationString;
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                timerCubit.startTimer();
-                              },
-                              icon: const Icon(
-                                Icons.play_arrow,
-                                size: 35,
+                        builder: (context, timerState) {
+                          String durationString = timerState is TimerLoadSuccess
+                              ? timerState.durationString
+                              : (timerState as TimerUpdateSuccess)
+                                  .durationString;
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  timerCubit.startTimer(context);
+                                },
+                                icon: const Icon(
+                                  Icons.play_arrow,
+                                  size: 35,
+                                ),
                               ),
-                            ),
-                            Flexible(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Text(
-                                  durationString,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Text(
+                                    durationString,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                timerCubit.stopTimer();
-                              },
-                              icon: const Icon(
-                                Icons.pause,
-                                size: 35,
+                              IconButton(
+                                onPressed: () async {
+                                  timerCubit.stopTimer(context);
+                                },
+                                icon: const Icon(
+                                  Icons.pause,
+                                  size: 35,
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      }),
+                            ],
+                          );
+                        },
+                      ),
                       CustomTextFormFieldWithLabel(
                         labelText: "Comment",
                         hintText: "Add new comment...",
@@ -303,15 +307,22 @@ class TaskDetailWidget extends StatelessWidget {
               splashRadius: 15,
             ),
           );
-          Widget timeSpanButton = taskCubit.taskModel.timespanList.isEmpty
-              ? const SizedBox()
-              : SizedBox(
+          Widget timeSpanButton = BlocBuilder<TaskCubit, TaskState>(
+            builder: (context, state) {
+              if (state is TaskLoadSuccess || state is TaskUpdate) {
+                TaskModel taskModel = (state is TaskLoadSuccess)
+                    ? state.taskModel
+                    : (state as TaskUpdate).taskModel;
+
+                if (taskModel.timespanList.isEmpty) {
+                  return const SizedBox();
+                }
+                return SizedBox(
                   width: 25,
                   height: 25,
                   child: IconButton(
                     onPressed: () async {
-                      showTaskTimeSpanDialog(
-                          context.read<TaskCubit>().taskModel);
+                      showTaskTimeSpanDialog(taskModel);
                     },
                     tooltip: "Show Time Span",
                     icon: const Icon(
@@ -321,6 +332,11 @@ class TaskDetailWidget extends StatelessWidget {
                     splashRadius: 15,
                   ),
                 );
+              } else {
+                return const SizedBox();
+              }
+            },
+          );
           if (isMobile) {
             return Scaffold(
               appBar: mobileAppbar(

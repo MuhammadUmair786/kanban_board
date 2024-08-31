@@ -47,9 +47,6 @@ This is the web version of Kanban Board: [Kanban Board Web Version](https://kanb
 ![Kanban Board Screenshot 2](#)  
 *Caption: Task detail view with comments and time tracking*
 
-## Demo Video
-
-Check out this [demo video](#) to see Kanban Board in action!
 
  
  

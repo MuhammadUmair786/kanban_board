@@ -46,6 +46,7 @@ class _ThemeWidgetState extends State<ThemeWidget> {
     Widget desiredWidget = ListView.builder(
       itemCount: availbleThemes.length,
       padding: const EdgeInsets.all(20),
+      shrinkWrap: true,
       itemBuilder: (context, index) {
         // Get the theme name and data
         String themeName = availbleThemes.keys.elementAt(index);
@@ -88,6 +89,7 @@ class _ThemeWidgetState extends State<ThemeWidget> {
       return Scaffold(
         appBar: mobileAppbar(title: titleText),
         body: desiredWidget,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       );
     } else {
       return Align(
@@ -97,6 +99,7 @@ class _ThemeWidgetState extends State<ThemeWidget> {
           constraints: const BoxConstraints(maxWidth: dialogMaxWidth),
           child: Material(
             borderRadius: BorderRadius.circular(borderRadius),
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

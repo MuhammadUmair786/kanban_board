@@ -11,7 +11,7 @@ class TaskCubit extends Cubit<TaskState> {
   TaskCubit(this.taskModel) : super(TaskLoadSuccess(taskModel));
 
   void updateTask(TaskModel updatedTaskModel) {
-    updatedTaskModel = updatedTaskModel;
+    taskModel = updatedTaskModel;
     emit(TaskUpdate(updatedTaskModel));
   }
 

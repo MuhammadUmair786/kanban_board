@@ -76,6 +76,9 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
                                 child: Text(
                                   startTimeLK.i18n(),
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 5),
@@ -83,6 +86,9 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
                                 child: Text(
                                   endTimeLK.i18n(),
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 5),
@@ -90,6 +96,9 @@ Future<dynamic> showTaskTimeSpanDialog(TaskModel taskModel) async {
                                 child: Text(
                                   durationLK.i18n(),
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ],
